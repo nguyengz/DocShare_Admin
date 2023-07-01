@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Button, Link, Stack, Typography } from '@mui/material';
+import { Box, Chip, Link, Stack, Typography } from '@mui/material';
 
 function TagList({ userAbout }) {
   const [tags, setTags] = useState([]);
@@ -23,7 +23,6 @@ function TagList({ userAbout }) {
       setTags(tagsArr);
     }
   };
-
   return (
     <Stack item>
       <Typography variant="h5" color="initial">
@@ -31,10 +30,10 @@ function TagList({ userAbout }) {
       </Typography>
       <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
         {tags.map((tag, index) => (
-          <Button
+          <Chip
             key={index}
             component={Link}
-            href={`/Search?tagName=${tag.tagName}`}
+            // href={`/Search?tagName=${tag.tagName}`}
             sx={{
               border: '1px solid',
               borderRadius: '16px',
@@ -43,10 +42,8 @@ function TagList({ userAbout }) {
               lineHeight: '24px',
               margin: '2px'
             }}
-            label={`tag.${tag.tagName}`}
-          >
-            {tag.tagName}
-          </Button>
+            label={tag.tagName}
+          />
         ))}
       </Box>
     </Stack>

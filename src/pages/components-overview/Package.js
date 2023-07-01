@@ -1,5 +1,5 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Switch, TextField, Tooltip } from '@mui/material';
-import axios from 'axios';
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Switch, Tooltip } from '@mui/material';
+
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -11,7 +11,10 @@ import Typography from '@mui/material/Typography';
 import { styled } from '@mui/system';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { addPackage, fetchPackages } from 'store/reducers/slices/package';
+import { fetchPackages, putPackageActive } from 'store/reducers/slices/package';
+import PackageForm from './Form/PackageForm';
+import PackageFormAdd from './Form/PackageFormAdd';
+
 // import { useDispatch, useSelector } from 'react-redux';
 // import { registerPackage } from '~/slices/paypal';
 
@@ -28,46 +31,15 @@ const PricingCard = styled(Card)(({ theme }) => ({
   }
 }));
 
-// const tiers = [
-//   {
-//     tiers_id: 1,
-//     title: 'Free',
-//     price: '0',
-//     description: ['10 downloads', '1 GB of storage'],
-
-//     buttonVariant: 'outlined'
-//   },
-//   {
-//     tiers_id: 2,
-//     title: 'Pro',
-//     subheader: 'Most popular',
-//     price: '15',
-//     description: ['20 downloads', '2 GB of storage'],
-
-//     buttonVariant: 'contained'
-//   },
-//   {
-//     tiers_id: 3,
-//     title: 'Enterprise',
-//     price: '30',
-//     description: ['50 downloads', '5 GB of storage'],
-
-//     buttonVariant: 'outlined'
-//   }
-// ];
 function Package() {
   const dispatch = useDispatch();
   // const { id } = useParams();
   //   const { user: currentUser } = useSelector((state) => state.auth);
   //   const [isUploading, setIsUploading] = useState(false);
-  let tiers = useSelector((state) => state.packages.list);
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [price, setPrice] = useState(0);
-  const [download, setDownload] = useState('');
-  const [cloud, setCloud] = useState(0);
-  const [showDetailsId, setShowDetailsId] = useState(null);
-  // const [isActive, setIsActive] = useState();
+  const tiers = useSelector((state) => state.packages.list);
+
+  const [showDetailsId, setShowDetailsId] = useState(false);
+  const [isTier, setIsTier] = useState();
   const [showDialog, setShowDialog] = useState(false);
   const [showForm, setShowForm] = useState(false);
 
@@ -80,37 +52,19 @@ function Package() {
     // hide the dialog box
     // reset input value to initial value // reset switch value to initial value
   };
-  const handleSwitchChange = async () => {
+  const handleSwitchChange = async (tier) => {
+    setIsTier(tier);
     setShowDialog(true);
   };
   // const payLink = useSelector((state) => state.package.data);
   const handleResgisterPackage = (tier) => {
-    setShowDetailsId(tier.tiers_id);
+    setShowDetailsId(true);
+    setIsTier(tier.id);
   };
 
-  const handlClickThongKe = () => {
-    setShowDetailsId(null);
-  };
-  const handleNameChange = (event) => {
-    setName(event.target.value);
-  };
-
-  const handleDescriptionChange = (event) => {
-    setDescription(event.target.value);
-  };
-
-  const handlePriceChange = (event) => {
-    setPrice(event.target.value);
-  };
-  const handleDownloadChange = (event) => {
-    setDownload(event.target.value);
-  };
-
-  const handleCouldChange = (event) => {
-    setCloud(event.target.value);
-  };
-  const handleSubmit = () => {
-    alert('Thanh cong');
+  const handlClickThongKe = (tier) => {
+    setShowDetailsId(false);
+    setIsTier(tier.id);
   };
   const handleAddPackage = () => {
     setShowForm(true); // show the form when the button is clicked
@@ -118,21 +72,12 @@ function Package() {
   const handleClosePackage = () => {
     setShowForm(false); // show the form when the button is clicked
   };
-  const handleFormSubmit = (event) => {
-    event.preventDefault(); // prevent the default form submission behavior
-    dispatch(addPackage({ name, description, price, download, cloud }));
-    setName('');
-    setDescription('');
-    setPrice(0);
-    setDownload(0);
-    setCloud(0); // TODO: submit the form data to the server and add the new package to the list
-    // hide the form after submission
-  };
-  const handleDialogSubmit = async (id) => {
+
+  const handleDialogSubmit = async () => {
+    const updatedPackage = { id: isTier.id, active: !isTier.active };
     try {
-      const updatedPackage = { id };
-      await axios.put(`http://localhost:8080/package/active`, updatedPackage);
-      // setIsActive(!isActive);
+      dispatch(putPackageActive(updatedPackage));
+      // await axios.put(`http://localhost:8080/package/active`, updatedPackage);
       setShowDialog(false);
     } catch (error) {
       console.error(error);
@@ -148,42 +93,10 @@ function Package() {
         </Button>
         {showForm && ( // display the form if the showForm state variable is true
           <Grid item xs={12} sm={8} ml={20} mt={-5}>
-            <form onSubmit={handleFormSubmit}>
-              <Grid container spacing={2} direction="row" sx={{ marginTop: '10px' }}>
-                <Grid container direction="row" spacing={2}>
-                  <Grid item>
-                    <TextField
-                      label="Name"
-                      value={name}
-                      onChange={(event) => setName(event.target.value)}
-                      sx={{ marginBlockEnd: '10px' }}
-                    />
-                  </Grid>
-                  <Grid item>
-                    <TextField label="Description" value={description} onChange={(event) => setDescription(event.target.value)} />
-                  </Grid>
-                  <Grid item>
-                    <TextField label="Price" type="number" value={price} onChange={(event) => setPrice(event.target.value)} />
-                  </Grid>
-                </Grid>
-                <Grid container direction="row" spacing={2}>
-                  <Grid item>
-                    <TextField label="Download" type="number" value={download} onChange={(event) => setDownload(event.target.value)} />
-                  </Grid>
-                  <Grid item>
-                    <TextField label="Cloud" type="number" value={cloud} onChange={(event) => setCloud(event.target.value)} />
-                  </Grid>
-                </Grid>
-                <Grid item>
-                  <Button variant="contained" color="primary" type="submit">
-                    Save
-                  </Button>
-                  <Button variant="outlined" color="primary" sx={{ marginLeft: '10px' }} onClick={handleClosePackage}>
-                    Close
-                  </Button>
-                </Grid>
-              </Grid>
-            </form>
+            <PackageFormAdd />
+            <Button variant="outlined" color="primary" sx={{ marginLeft: '100px', marginTop: '-60px' }} onClick={handleClosePackage}>
+              Close
+            </Button>
           </Grid>
         )}
       </Grid>
@@ -205,7 +118,8 @@ function Package() {
             <PricingCard
               sx={{
                 width: '200px',
-                padding: '15px'
+                padding: '15px',
+                boxShadow: tier.active ? '0 0 10px rgba(0, 255, 0, 0.5)' : '0 0 10px rgb(255 1 1)'
               }}
             >
               <CardHeader
@@ -246,46 +160,19 @@ function Package() {
                 <Button
                   fullWidth
                   variant="outlined"
-                  onClick={() => (showDetailsId === tier.tiers_id ? handlClickThongKe() : handleResgisterPackage(tier))}
+                  onClick={() => (showDetailsId && isTier === tier.id ? handlClickThongKe(tier) : handleResgisterPackage(tier))}
                 >
-                  {showDetailsId === tier.tiers_id ? 'Total' : 'Edit'}
+                  {showDetailsId && isTier === tier.id ? 'Total' : 'Edit'}
                 </Button>
               </CardActions>
             </PricingCard>
-            {showDetailsId === tier.tiers_id ? (
+            {showDetailsId && isTier === tier.id ? (
               <Grid item xs={12} sm={9} ml={10}>
                 <Typography variant="h3"> Edit</Typography>
-                <form>
-                  <Grid container spacing={2} direction="row" sx={{ marginTop: '10px' }}>
-                    <Grid container direction="row" spacing={2}>
-                      <Grid item>
-                        <TextField label="Name" value={name} onChange={handleNameChange} sx={{ marginBlockEnd: '10px' }} />
-                      </Grid>
-                      <Grid item>
-                        <TextField label="Description" value={description} onChange={handleDescriptionChange} />
-                      </Grid>
-                      <Grid item>
-                        <TextField label="Price" type="number" value={price} onChange={handlePriceChange} />
-                      </Grid>
-                    </Grid>
-                    <Grid container direction="row" spacing={2}>
-                      <Grid item>
-                        <TextField label="Download" type="number" value={download} onChange={handleDownloadChange} />
-                      </Grid>
-                      <Grid item>
-                        <TextField label="Could" type="number" value={cloud} onChange={handleCouldChange} />
-                      </Grid>
-                    </Grid>
-                    <Grid item>
-                      <Button variant="contained" color="primary" onClick={handleSubmit}>
-                        Save
-                      </Button>
-                    </Grid>
-                  </Grid>
-                </form>
+                <PackageForm initialTier={tier} />
                 <Grid item>
                   <Tooltip arrow placement="right" title={tier.active ? 'Disable' : 'Enable'}>
-                    <Switch defaultChecked={tier.active} onChange={handleSwitchChange} />
+                    <Switch defaultChecked={tier.active} onClick={() => handleSwitchChange(tier)} />
                     {tier.active ? 'Enable' : 'Disable'}
                   </Tooltip>
                 </Grid>
@@ -297,19 +184,19 @@ function Package() {
                 <Typography> Sales: 12 sales</Typography>
               </Grid>
             )}
+            <Dialog open={showDialog} onClose={() => handleDialogClose(tier.id)}>
+              <DialogTitle>{tier.active ? 'Disable' : 'Enable'} User</DialogTitle>
+              <DialogContent>
+                <p>Are you sure you want to {tier.active ? 'disable' : 'enable'} the package?</p>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleDialogClose}>Cancel</Button>
+                <Button onClick={() => handleDialogSubmit(tier)} variant="contained">
+                  Confirm
+                </Button>
+              </DialogActions>
+            </Dialog>
           </Grid>
-          <Dialog open={showDialog} onClose={() => handleDialogClose(tier.id)}>
-            <DialogTitle>{tier.active ? 'Disable' : 'Enable'} User</DialogTitle>
-            <DialogContent>
-              <p>Are you sure you want to {tier.active ? 'disable' : 'enable'} the package?</p>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleDialogClose}>Cancel</Button>
-              <Button onClick={() => handleDialogSubmit(tier.id)} variant="contained">
-                Confirm
-              </Button>
-            </DialogActions>
-          </Dialog>
         </>
       ))}
 

@@ -6,8 +6,11 @@ const fetchPackageList = () => {
   return axios.get(API_URL + '/packages');
 };
 
-const putPackageActive = (id, active) => {
-  return axios.put(`${API_URL}/package/active/${id}`, { active });
+const putPackageActive = (updatedPackage) => {
+  return axios.put(`${API_URL}/package/active`, updatedPackage);
+};
+const updatePackage = (updatedPackage) => {
+  return axios.put(`${API_URL}/package/update`, updatedPackage);
 };
 const addPackage = (packageData) => {
   return axios.post(API_URL + '/package/add', packageData);
@@ -15,6 +18,7 @@ const addPackage = (packageData) => {
 const packageService = {
   fetchPackageList,
   putPackageActive,
+  updatePackage,
   addPackage
 };
 

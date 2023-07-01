@@ -18,6 +18,22 @@ export const fetchUserAbout = createAsyncThunk('user/fetchUserAbout', async (use
     return thunkAPI.rejectWithValue(error.response.data);
   }
 });
+export const putUserActive = createAsyncThunk('user/putUserActive', async (user, thunkAPI) => {
+  try {
+    const response = await userService.putUserActive(user);
+    Swal.fire({
+      icon: 'success',
+      title: 'User status updated successfully',
+      timer: 2000,
+      showConfirmButton: false
+    });
+    return response.data;
+  } catch (error) {
+    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+    thunkAPI.dispatch(setMessage(message));
+    return thunkAPI.rejectWithValue();
+  }
+});
 
 const userSlice = createSlice({
   name: 'user',
@@ -47,6 +63,20 @@ const userSlice = createSlice({
       state.userAbout = action.payload;
     },
     [fetchUserAbout.rejected]: (state, action) => {
+      state.status = 'failed';
+      state.error = action.error.message;
+    },
+    // Add a closing bracket here
+    [putUserActive.pending]: (state) => {
+      state.status = 'loading';
+    },
+    // Handle the fulfilled state when updating package active status
+    [putUserActive.fulfilled]: (state, action) => {
+      state.status = 'succeeded';
+      state.listUser = state.listUser.map((user) => (user.id === action.payload.id ? action.payload : user));
+    },
+    // Handle the rejected state when updating package active status
+    [putUserActive.rejected]: (state, action) => {
       state.status = 'failed';
       state.error = action.error.message;
     }

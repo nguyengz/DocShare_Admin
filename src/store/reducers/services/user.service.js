@@ -8,9 +8,13 @@ const fetchUser = () => {
 const fetchUserAbout = (id) => {
   return axios.get(API_URL + '/user?user_id=' + id);
 };
+const putUserActive = (user) => {
+  return axios.put(`${API_URL}/package/active`, user);
+};
 const userService = {
   fetchUser,
-  fetchUserAbout
+  fetchUserAbout,
+  putUserActive
 };
 
 export default userService;

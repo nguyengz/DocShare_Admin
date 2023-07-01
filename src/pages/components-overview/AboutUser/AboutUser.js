@@ -84,7 +84,7 @@ function AboutUser() {
   return (
     <Box sx={{ minHeight: '1000px', margin: '1px', background: 'white' }}>
       <Grid container sm={10} spacing={2} direction="column" style={style.gridUser}>
-        <Grid item md={4}>
+        <Grid item md={6} spacing={2} gap={1}>
           <Stack direction="row">
             <Stack item>
               <Item>
@@ -96,6 +96,25 @@ function AboutUser() {
             <Stack item sx={{ marginLeft: '10px' }}>
               <Item>
                 <Typography variant="h5">{userAbout?.username}</Typography>
+              </Item>
+              <Item>
+                <Typography>Username:</Typography>
+              </Item>
+              <Item>
+                <Typography>Email:</Typography>
+              </Item>
+              <Item>
+                <Typography>Phone:</Typography>
+              </Item>
+              <Item>
+                <Typography>Facebook</Typography>
+              </Item>
+            </Stack>
+            <Stack item sx={{ marginLeft: '150px' }}>
+              <Item>
+                <Typography variant="h5" hidden>
+                  {userAbout?.username}
+                </Typography>
               </Item>
               <Item>
                 <Typography
@@ -129,6 +148,53 @@ function AboutUser() {
                   }}
                 >
                   Followings
+                </Typography>
+              </Item>
+              <Item>
+                <Typography
+                  component={Link}
+                  onClick={() => {
+                    // setidlink(page.id);
+                    // alert(page.title);
+                  }}
+                >
+                  Likes
+                </Typography>
+              </Item>
+            </Stack>
+            <Stack item sx={{ marginLeft: '150px' }}>
+              <Item>
+                <Typography
+                  component={Link}
+                  onClick={() => {
+                    // setidlink(page.id);
+                    // alert(page.title);
+                  }}
+                  href={`/`}
+                >
+                  {userAbout?.files.length} Oders
+                </Typography>
+              </Item>
+              <Item>
+                <Typography
+                  component={Link}
+                  onClick={() => {
+                    // setidlink(page.id);
+                    // alert(page.title);
+                  }}
+                >
+                  {userAbout?.friends.length} Downloads
+                </Typography>
+              </Item>
+              <Item>
+                <Typography
+                  component={Link}
+                  onClick={() => {
+                    // setidlink(page.id);
+                    // alert(page.title);
+                  }}
+                >
+                  1 Stogre
                 </Typography>
               </Item>
               <Item>
