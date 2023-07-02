@@ -31,6 +31,8 @@ import { LogoutOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons
 import { logout } from 'store/reducers/slices/auth';
 import { useDispatch, useSelector } from 'react-redux';
 import eventBus from 'common/EventBus';
+import { useNavigate } from '../../../../../../node_modules/react-router-dom/dist/index';
+import Swal from 'sweetalert2';
 
 // tab panel wrapper
 function TabPanel({ children, value, index, ...other }) {
@@ -59,13 +61,31 @@ function a11yProps(index) {
 const Profile = () => {
   const theme = useTheme();
   const dispatch = useDispatch();
+  let navigate = useNavigate();
   const { user: currentUser } = useSelector((state) => state.auth);
   // const handleLogout = useCallback () => {
   //   dispatch(logout());
   // };
   const handleLogout = useCallback(() => {
-    dispatch(logout());
-  }, [dispatch]);
+    try {
+      Swal.fire({
+        title: 'Logout',
+        text: 'Are you sure you want to log out?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, log out!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          dispatch(logout());
+          navigate('/');
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }, [dispatch, navigate]);
   useEffect(() => {
     return () => {
       eventBus.remove('logout');

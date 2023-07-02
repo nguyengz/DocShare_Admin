@@ -7,10 +7,16 @@ export const fetchFileDetail = createAsyncThunk('file/fetchFileDetail', async (d
   thunkAPI.dispatch(setMessage(response.data.message));
   return response.data;
 });
-export const deletedFile = createAsyncThunk('file/deletedFile', async (data, thunkAPI) => {
-  const response = await fileService.deletedFile(data);
-  thunkAPI.dispatch(setMessage(response.data.message));
-  return response.data;
+export const deletedFile = createAsyncThunk('file/deletedFile', async (dataDelete, thunkAPI) => {
+  try {
+    const response = await fileService.deletedFile(dataDelete);
+    thunkAPI.dispatch(setMessage(response.data.message));
+    return response.data;
+  } catch (error) {
+    const errorMessage = error.response ? error.response.data.message : 'An error occurred while deleting the file';
+    thunkAPI.dispatch(setMessage(errorMessage));
+    throw error;
+  }
 });
 const fileSlice = createSlice({
   name: 'file',

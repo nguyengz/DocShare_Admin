@@ -1,6 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 import userService from '../services/user.service';
+import { setMessage } from './message';
+import Swal from 'sweetalert2';
 
 export const fetchUser = createAsyncThunk('user/fetchUser', async (thunkAPI) => {
   try {
@@ -18,9 +20,9 @@ export const fetchUserAbout = createAsyncThunk('user/fetchUserAbout', async (use
     return thunkAPI.rejectWithValue(error.response.data);
   }
 });
-export const putUserActive = createAsyncThunk('user/putUserActive', async (user, thunkAPI) => {
+export const putUserActive = createAsyncThunk('user/putUserActive', async (data, thunkAPI) => {
   try {
-    const response = await userService.putUserActive(user);
+    const response = await userService.putUserActive(data);
     Swal.fire({
       icon: 'success',
       title: 'User status updated successfully',

@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import { Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 // material-ui
 import {
   Button,
   Checkbox,
-  Divider,
   FormControlLabel,
   FormHelperText,
   Grid,
@@ -24,7 +23,6 @@ import * as Yup from 'yup';
 import { Formik, Form } from 'formik';
 
 // project import
-import FirebaseSocial from './FirebaseSocial';
 import AnimateButton from 'components/@extended/AnimateButton';
 
 // assets
@@ -35,30 +33,32 @@ import { useDispatch, useSelector } from 'react-redux';
 // ============================|| FIREBASE - LOGIN ||============================ //
 
 const AuthLogin = () => {
-  // let navigate = useNavigate();
+  let navigate = useNavigate();
   const [checked, setChecked] = useState(false);
 
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { isLoggedIn } = useSelector((state) => state.auth);
+  const { user: currentUser } = useSelector((state) => state.auth);
+
   // const { message } = useSelector((state) => state.message);
   const dispatch = useDispatch();
   const handleLogin = async (formValue) => {
     const { username, password } = formValue;
     setLoading(true);
 
-    dispatch(login({ username, password }))
-      .unwrap()
-      .then(() => {
-        navigate('/');
-        // window.location.reload();
-      })
-      .catch(() => {
-        setLoading(false);
-      });
+    try {
+      const response = await dispatch(login({ username, password }));
+      console.log(response);
+      // Display success message to user
+      // dispatch(setMessage('File deleted successfully'));
+    } catch (error) {
+      console.log(error);
+      // Display error message to user
+      dispatch(setMessage(error.message || 'An error occurred while deleting the file'));
+    }
   };
-  if (isLoggedIn) {
-    return <Navigate to="/" />;
+  if (currentUser?.token) {
+    navigate('/');
   }
 
   const handleClickShowPassword = () => {
@@ -181,14 +181,6 @@ const AuthLogin = () => {
                   </Button>
                   {loading && <span className="spinner-border spinner-border-sm"></span>}
                 </AnimateButton>
-              </Grid>
-              <Grid item xs={12}>
-                <Divider>
-                  <Typography variant="caption"> Login with</Typography>
-                </Divider>
-              </Grid>
-              <Grid item xs={12}>
-                <FirebaseSocial />
               </Grid>
             </Grid>
           </Form>

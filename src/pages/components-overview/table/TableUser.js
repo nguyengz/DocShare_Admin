@@ -1,10 +1,14 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { MaterialReactTable } from 'material-react-table';
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, TableCell, TextField, Tooltip } from '@mui/material';
+import { Avatar, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, TableCell, Tooltip } from '@mui/material';
 // import { Delete, Edit } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 import { makeStyles } from '../../../../node_modules/@mui/styles/index';
 import { Switch } from '@mui/material';
+import { putUserActive } from 'store/reducers/slices/user';
+import { useDispatch } from 'react-redux';
+import randomColor from 'randomcolor';
+
 // import { fetchUser } from '~/slices/user';
 
 // import { useEffect } from 'react';
@@ -27,14 +31,14 @@ const useStyles = makeStyles(() => ({
 }));
 
 function Table(props) {
+  const dispatch = useDispatch();
   //   const [createModalOpen, setCreateModalOpen] = useState(false);
   const classes = useStyles();
   const [tableData, setTableData] = useState([]);
 
   const [showDialog, setShowDialog] = useState(false);
   const [dialogData, setDialogData] = useState({});
-  const [inputValue, setInputValue] = useState('');
-  const [initialEnabledState, setInitialEnabledState] = useState(false);
+  const [updatedTableData, setUpdatedTableData] = useState([]);
   // const [status, setStatus] = useState(props.data?.enabled);
   // const [fileCount, setFileCount] = useState(0);
   useEffect(() => {
@@ -42,49 +46,38 @@ function Table(props) {
       setTableData(props.data);
     }
     // setFileCount(props.data.length); // tính toán số lượng files và cập nhật vào state
-  }, [props.data]);
+  }, [props.data, tableData]);
   // const filesCount = props.data.files.length;
   // const handleDeleteFile = (fileId) => {
   //   const updatedTableData = tableData.filter((file) => file.id !== fileId);
   //   setTableData(updatedTableData);
   // };
-  const handleToggleEnabled = (row) => {
+  const handleToggleActive = (row) => {
     setDialogData(row); // store the row data in state
-    setShowDialog(true); // show the dialog box
-    setInputValue(row.original?.disabledReason || ''); // set input value to the current disabled reason or empty string
-    // save the initial input value
-    setInitialEnabledState(row.original?.enabled || false); // save the initial enabled state
+    setShowDialog(true); // show the dialog box; // save the initial enabled state
   };
 
   const handleDialogClose = () => {
     setShowDialog(false); // hide the dialog box
-    setInputValue(null); // reset input value to initial value
-    setTableData(
-      tableData.map((user) =>
-        user.id === dialogData.original.id
-          ? {
-              ...user,
-              enabled: initialEnabledState
-            }
-          : user
-      )
-    ); // reset switch value to initial value
   };
 
-  const handleDialogSubmit = (newEnabledState) => {
-    const updatedTableData = tableData.map((user) => {
-      if (user.id === dialogData.original.id) {
-        return {
-          ...user,
-          enabled: newEnabledState,
-          disabledReason: !newEnabledState ? inputValue : null
-        };
-      } else {
-        return user;
-      }
-    });
-    setTableData(updatedTableData);
-    setShowDialog(false); // hide the dialog box
+  const handleDialogSubmit = (dialogData) => {
+    const data = { id: dialogData.id, enabled: !dialogData.enabled };
+    console.log(data);
+    try {
+      dispatch(putUserActive(data));
+      const updatedData = tableData.map((row) => {
+        if (row.id === dialogData.id) {
+          return { ...row, enabled: !row.enabled };
+        }
+        return row;
+      });
+      setUpdatedTableData(updatedData);
+      setShowDialog(false);
+    } catch (error) {
+      console.error(error);
+    }
+    setShowDialog(false);
   };
   // const formatDate = (dateString) => {
   //   const date = new Date(dateString);
@@ -100,6 +93,7 @@ function Table(props) {
   //     return format(date, 'dd/MM/yyyy HH:mm:ss');
   //   };
   const columnsOrder = ['avatar', 'username', 'email', 'enabled', 'maxUpload', 'files'];
+
   const columns = useMemo(() => [
     {
       accessorKey: 'avatar',
@@ -109,16 +103,9 @@ function Table(props) {
       enableSorting: false,
       size: 50,
       Cell: ({ row }) => (
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '1rem'
-          }}
-        >
-          <img alt="avatar" height={30} src={row.avatar} loading="lazy" style={{ borderRadius: '50%' }} />
-          {/* using renderedCellValue instead of cell.getValue() preserves filter match highlighting */}
-        </Box>
+        <Avatar sx={{ bgcolor: randomColor() }} src={row.original?.avatar}>
+          {row.original?.username.charAt(0).toUpperCase()}
+        </Avatar>
       )
     },
     {
@@ -185,7 +172,7 @@ function Table(props) {
             size: 120
           }
         }}
-        data={tableData}
+        data={updatedTableData.length > 0 ? updatedTableData : tableData}
         columns={columns}
         columnsOrder={columnsOrder}
         enableEditing
@@ -193,7 +180,7 @@ function Table(props) {
         renderRowActions={({ row }) => (
           <Box sx={{ display: 'flex', gap: '1rem' }}>
             <Tooltip arrow placement="right" title={row.original.enabled ? 'Disable' : 'Enable'}>
-              <Switch defaultChecked={row.original?.enabled} onChange={() => handleToggleEnabled(row)} />
+              <Switch defaultChecked={row.original?.enabled} onChange={() => handleToggleActive(row.original)} />
             </Tooltip>
           </Box>
         )}
@@ -202,17 +189,10 @@ function Table(props) {
         <DialogTitle>{dialogData.original?.enabled ? 'Disable' : 'Enable'} User</DialogTitle>
         <DialogContent>
           <p>Are you sure you want to {dialogData.original?.enabled ? 'disable' : 'enable'} the user?</p>
-          <TextField
-            label="Reason for disabling"
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            fullWidth
-            margin="normal"
-          />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleDialogClose}>Cancel</Button>
-          <Button onClick={() => handleDialogSubmit(!dialogData.original?.enabled)} variant="contained">
+          <Button onClick={() => handleDialogSubmit(dialogData)} variant="contained">
             {dialogData.original?.enabled ? 'Disable' : 'Enable'}
           </Button>
         </DialogActions>

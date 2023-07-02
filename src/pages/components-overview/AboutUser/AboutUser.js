@@ -3,33 +3,26 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Avatar, Box, Grid, Link, Stack, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { AccountCircle } from '@mui/icons-material';
 
 import { fetchUserAbout } from 'store/reducers/slices/user';
 import TagList from '../ListComponent/TagList';
 import FileList from '../ListComponent/FileList';
+import randomColor from 'randomcolor';
 
-const Item = styled(Grid)(({ theme }) => ({
+const Item = styled(Grid)(() => ({
   margin: 2,
   textAlign: 'left',
-  color: theme.palette.text.secondary,
-  flexDirection: 'column',
-
-  sx: {
-    '&:hover': {
-      color: 'blue'
-    },
-    '&:hover a': {
-      color: 'blue'
-    }
-  }
+  color: 'GrayText',
+  flexDirection: 'column'
 }));
 
 const style = {
   largeAvatar: {
     width: '100px',
     height: '100px',
-    fontSize: '50px'
+    fontSize: '50px',
+    objectFit: 'cover',
+    background: randomColor()
   },
   gridUser: {
     margin: 'auto',
@@ -54,6 +47,7 @@ function AboutUser() {
   const { id } = useParams();
   let userAbout = useSelector((state) => state.user.userAbout);
   const [imageData, setImageData] = useState('');
+  const firstLetter = userAbout?.username.charAt(0);
   useEffect(() => {
     console.log(id);
     dispatch(fetchUserAbout(id)).then((response) => {
@@ -82,135 +76,134 @@ function AboutUser() {
     navigate(`/fileDetail/${todo.id}`);
   };
   return (
-    <Box sx={{ minHeight: '1000px', margin: '1px', background: 'white' }}>
+    <Box sx={{ minHeight: '1000px', margin: '1px', background: '#f2f2f2' }}>
       <Grid container sm={10} spacing={2} direction="column" style={style.gridUser}>
-        <Grid item md={6} spacing={2} gap={1}>
-          <Stack direction="row">
+        <Grid item md={6} spacing={2} gap={1} mt={2}>
+          <Stack direction="row" sx={{ flex: 2, alignItems: 'center' }}>
             <Stack item>
               <Item>
-                <Avatar style={style.largeAvatar}>
-                  <AccountCircle />
+                <Avatar style={style.largeAvatar} src={userAbout?.avatar}>
+                  {' '}
+                  {firstLetter}
+                  {/* <AccountCircle /> */}
                 </Avatar>
               </Item>
             </Stack>
-            <Stack item sx={{ marginLeft: '10px' }}>
-              <Item>
-                <Typography variant="h5">{userAbout?.username}</Typography>
-              </Item>
-              <Item>
-                <Typography>Username:</Typography>
-              </Item>
-              <Item>
-                <Typography>Email:</Typography>
-              </Item>
-              <Item>
-                <Typography>Phone:</Typography>
-              </Item>
-              <Item>
-                <Typography>Facebook</Typography>
-              </Item>
-            </Stack>
-            <Stack item sx={{ marginLeft: '150px' }}>
-              <Item>
-                <Typography variant="h5" hidden>
-                  {userAbout?.username}
-                </Typography>
-              </Item>
-              <Item>
-                <Typography
-                  component={Link}
-                  onClick={() => {
-                    // setidlink(page.id);
-                    // alert(page.title);
-                  }}
-                  href={`/`}
-                >
-                  {userAbout?.files.length} DocShare
-                </Typography>
-              </Item>
-              <Item>
-                <Typography
-                  component={Link}
-                  onClick={() => {
-                    // setidlink(page.id);
-                    // alert(page.title);
-                  }}
-                >
-                  {userAbout?.friends.length} Followers
-                </Typography>
-              </Item>
-              <Item>
-                <Typography
-                  component={Link}
-                  onClick={() => {
-                    // setidlink(page.id);
-                    // alert(page.title);
-                  }}
-                >
-                  Followings
-                </Typography>
-              </Item>
-              <Item>
-                <Typography
-                  component={Link}
-                  onClick={() => {
-                    // setidlink(page.id);
-                    // alert(page.title);
-                  }}
-                >
-                  Likes
-                </Typography>
-              </Item>
-            </Stack>
-            <Stack item sx={{ marginLeft: '150px' }}>
-              <Item>
-                <Typography
-                  component={Link}
-                  onClick={() => {
-                    // setidlink(page.id);
-                    // alert(page.title);
-                  }}
-                  href={`/`}
-                >
-                  {userAbout?.files.length} Oders
-                </Typography>
-              </Item>
-              <Item>
-                <Typography
-                  component={Link}
-                  onClick={() => {
-                    // setidlink(page.id);
-                    // alert(page.title);
-                  }}
-                >
-                  {userAbout?.friends.length} Downloads
-                </Typography>
-              </Item>
-              <Item>
-                <Typography
-                  component={Link}
-                  onClick={() => {
-                    // setidlink(page.id);
-                    // alert(page.title);
-                  }}
-                >
-                  1 Stogre
-                </Typography>
-              </Item>
-              <Item>
-                <Typography
-                  component={Link}
-                  onClick={() => {
-                    // setidlink(page.id);
-                    // alert(page.title);
-                  }}
-                >
-                  Likes
-                </Typography>
-              </Item>
-            </Stack>
+            <Box sx={{ flex: 1 }}>
+              <Typography variant="h5">{userAbout?.username}</Typography>
+              <Stack direction="row" spacing={30}>
+                <Stack item>
+                  <Item>
+                    <Typography>Username:</Typography>
+                  </Item>
+                  <Item>
+                    <Typography>Email:</Typography>
+                  </Item>
+                  <Item>
+                    <Typography>Phone:</Typography>
+                  </Item>
+                  <Item>
+                    <Typography>Facebook</Typography>
+                  </Item>
+                </Stack>
+                <Stack item>
+                  <Item>
+                    <Typography
+                      component={Link}
+                      onClick={() => {
+                        // setidlink(page.id);
+                        // alert(page.title);
+                      }}
+                      href={`/`}
+                    >
+                      {userAbout?.files.length} DocShare
+                    </Typography>
+                  </Item>
+                  <Item>
+                    <Typography
+                      component={Link}
+                      onClick={() => {
+                        // setidlink(page.id);
+                        // alert(page.title);
+                      }}
+                    >
+                      {userAbout?.friends.length} Followers
+                    </Typography>
+                  </Item>
+                  <Item>
+                    <Typography
+                      component={Link}
+                      onClick={() => {
+                        // setidlink(page.id);
+                        // alert(page.title);
+                      }}
+                    >
+                      Followings
+                    </Typography>
+                  </Item>
+                  <Item>
+                    <Typography
+                      component={Link}
+                      onClick={() => {
+                        // setidlink(page.id);
+                        // alert(page.title);
+                      }}
+                    >
+                      Likes
+                    </Typography>
+                  </Item>
+                </Stack>
+                <Stack item>
+                  <Item>
+                    <Typography
+                      component={Link}
+                      onClick={() => {
+                        // setidlink(page.id);
+                        // alert(page.title);
+                      }}
+                      href={`/`}
+                    >
+                      {userAbout?.files.length} Oders
+                    </Typography>
+                  </Item>
+                  <Item>
+                    <Typography
+                      component={Link}
+                      onClick={() => {
+                        // setidlink(page.id);
+                        // alert(page.title);
+                      }}
+                    >
+                      {userAbout?.friends.length} Downloads
+                    </Typography>
+                  </Item>
+                  <Item>
+                    <Typography
+                      component={Link}
+                      onClick={() => {
+                        // setidlink(page.id);
+                        // alert(page.title);
+                      }}
+                    >
+                      1 Stogre
+                    </Typography>
+                  </Item>
+                  <Item>
+                    <Typography
+                      component={Link}
+                      onClick={() => {
+                        // setidlink(page.id);
+                        // alert(page.title);
+                      }}
+                    >
+                      Likes
+                    </Typography>
+                  </Item>
+                </Stack>
+              </Stack>
+            </Box>
           </Stack>
-          <Stack item>
+          <Stack item mt={10}>
             <TagList userAbout={userAbout} />
           </Stack>
         </Grid>

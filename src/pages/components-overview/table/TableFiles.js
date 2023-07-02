@@ -1,9 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { MaterialReactTable } from 'material-react-table';
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, TextField, Tooltip } from '@mui/material';
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, TextField, Tooltip, Typography } from '@mui/material';
 import { Delete } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 import SendIcon from '@mui/icons-material/Send';
+import { deletedFile } from 'store/reducers/slices/file';
+import { useDispatch } from 'react-redux';
 // import { Delete, Edit } from '@mui/icons-material';
 
 // import { fetchUser } from '~/slices/user';
@@ -13,11 +15,13 @@ import SendIcon from '@mui/icons-material/Send';
 
 const TableFiles = (props) => {
   //   const [createModalOpen, setCreateModalOpen] = useState(false);
-
+  const dispatch = useDispatch();
   const [tableData, setTableData] = useState([]);
 
   const [validationErrors, setValidationErrors] = useState({});
   const [openDialog, setOpenDialog] = useState(false);
+  const [openDialogDl, setOpenDialogDl] = useState(false);
+  const [dialogDataDl, setDialogDataDl] = useState({});
   const [message, setMessage] = useState('');
   // const [fileCount, setFileCount] = useState(0);
   useEffect(() => {
@@ -27,15 +31,27 @@ const TableFiles = (props) => {
     // setFileCount(props.data.length); // tính toán số lượng files và cập nhật vào state
   }, [props.data, tableData]);
   // const filesCount = props.data.files.length;
-  const handleDeleteFile = (fileId) => {
-    const updatedTableData = tableData.filter((file) => file.id !== fileId);
-    setTableData(updatedTableData);
-  };
-  const handleConfirmDelete = (file) => {
-    const confirmed = window.confirm(`Are you sure you want to delete the file ${file.fileName}?`);
-    if (confirmed) {
-      handleDeleteFile(file.id);
+  const handleDeleteFile = async (dialogDataDl) => {
+    const dataDelete = { user_id: dialogDataDl.userId, file_id: dialogDataDl.id, drive_id: dialogDataDl.link };
+    console.log(dataDelete);
+    try {
+      const response = await dispatch(deletedFile(dataDelete));
+      console.log(response);
+      // Display success message to user
+      dispatch(setMessage('File deleted successfully'));
+    } catch (error) {
+      console.log(error);
+      // Display error message to user
+      dispatch(setMessage(error.message || 'An error occurred while deleting the file'));
     }
+  };
+  const handleOpenDialogDl = (row) => {
+    setDialogDataDl(row);
+    setOpenDialogDl(true);
+  };
+
+  const handleCloseDialogDl = () => {
+    setOpenDialogDl(false);
   };
   const handleOpenDialog = () => {
     setOpenDialog(true);
@@ -83,11 +99,14 @@ const TableFiles = (props) => {
     [validationErrors]
   );
 
-  //   const formatDate = (dateString) => {
-  //     const date = moment.utc(dateString).toDate();
-  //     return format(date, 'dd/MM/yyyy HH:mm:ss');
-  //   };
   const columnsOrder = ['fileName', 'userName', 'category', 'uploadDate', 'view', 'likeFile', 'repostCount', 'tags'];
+  function formatDateTime(dateTimeString) {
+    const dateTime = new Date(dateTimeString);
+    const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+    const date = dateTime.toLocaleDateString('en-US', options);
+    const time = dateTime.toLocaleTimeString('en-US');
+    return `${time} ${date}`;
+  }
   const columns = useMemo(
     () => [
       {
@@ -125,7 +144,7 @@ const TableFiles = (props) => {
         header: 'UploadDate',
         size: 50,
         width: '20%',
-        // Cell: ({ cell }) => formatDate(cell.value),
+        Cell: ({ row }) => formatDateTime(row.original?.uploadDate),
         muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
           ...getCommonEditTextFieldProps(cell)
         })
@@ -206,13 +225,34 @@ const TableFiles = (props) => {
               </IconButton>
             </Tooltip>
             <Tooltip arrow placement="right" title="Delete">
-              <IconButton color="error" onClick={() => handleConfirmDelete(row.original)}>
+              <IconButton color="error" onClick={() => handleOpenDialogDl(row.original)}>
                 <Delete />
               </IconButton>
             </Tooltip>
           </Box>
         )}
       />
+      {/* Delete */}
+      <Dialog open={openDialogDl} onClose={handleCloseDialogDl}>
+        <DialogTitle>
+          <Typography variant="h3" color="initial">
+            Delete file{' '}
+          </Typography>
+        </DialogTitle>
+        <DialogContent>
+          <Typography variant="body1" color="initial">
+            {' '}
+            Are you sure you want to Delete file: {dialogDataDl?.fileName} of User: {dialogDataDl?.userName} ?
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialogDl}>Cancel</Button>
+          <Button onClick={() => handleDeleteFile(dialogDataDl)} variant="contained">
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+      {/* Send mail */}
       <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="md" fullWidth>
         <DialogTitle>Send Message</DialogTitle>
         <DialogContent>

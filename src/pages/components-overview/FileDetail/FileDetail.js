@@ -9,7 +9,6 @@ import 'swiper/css/pagination';
 import 'swiper/css/free-mode';
 import 'swiper/css/scrollbar';
 
-import DownloadIcon from '@mui/icons-material/Download';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchFileDetail } from 'store/reducers/slices/file';
 import { pdfjs } from 'react-pdf';
@@ -23,7 +22,6 @@ const styles = {
     justifyContent: 'center',
     alignItems: 'center',
     gap: '1px',
-    width: '1000px',
     height: '100%'
   },
   imageWrapper: {
@@ -57,12 +55,13 @@ function FileDetail() {
   // const [showPricing, setShowPricing] = useState(false);
 
   const fileDetail = useSelector((state) => state.file.detailList);
-  // const uploadDate = new Date(fileDetail.uploadDate);
-  // const options = { year: 'numeric', month: 'short', day: 'numeric' };
-  // const formattedDate = uploadDate.toLocaleDateString('en-US', options);
+  const uploadDate = new Date(fileDetail.uploadDate);
+  const options = { year: 'numeric', month: 'short', day: 'numeric' };
+  const formattedDate = uploadDate.toLocaleDateString('en-US', options);
 
   // const [error, setError] = useState(null);
-
+  // const options = { year: 'numeric', month: 'short', day: 'numeric' };
+  // const formattedDate = uploadDate.toLocaleDateString('en-US', options);
   const tags = fileDetail.tags;
   // const link = state.link;
   // const file_id = id;
@@ -122,7 +121,8 @@ function FileDetail() {
                   height: 400,
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'center'
+                  justifyContent: 'center',
+                  boxShadow: '2px 2px 4px rgba(0, 0, 0, 0.4)'
                 }}
               >
                 {isLoading ? (
@@ -165,14 +165,14 @@ function FileDetail() {
                 xs={12}
                 sm={8}
                 item
+                mt={1}
                 sx={{
-                  height: 300,
-                  margin: 1
+                  height: 300
                 }}
                 spacing={4}
               >
                 <Stack sm={8} direction="row" spacing={1} justifyContent="space-between">
-                  <Stack sm={4} item sx={{ width: '80%', marginLeft: '5px' }}>
+                  <Stack sm={4} item sx={{ marginLeft: '5px' }}>
                     <Typography
                       variant="h2"
                       sx={{
@@ -184,28 +184,10 @@ function FileDetail() {
                       {fileDetail.fileName > 100 ? fileDetail.fileName.slice(0, 100) + '...' : fileDetail.fileName}
                     </Typography>
                     <Typography variant="caption" sx={{ fontSize: '15px', marginLeft: '10px' }}>
-                      • {fileDetail.likeFile} likes • {fileDetail.view} views
-                    </Typography>
-                  </Stack>
-                  <Stack item>
-                    <Button variant="contained" color="primary" height="50px">
-                      <DownloadIcon />
-                      Download Now
-                    </Button>
-                    {/* {downloadUrl && (
-                      <a href={downloadUrl} download={fileDetail.fileName}>
-                        Downloaded File
-                      </a>
-                    )} */}
-
-                    {/* {status === "loading" && <span>Downloading...</span>}
-                    {status === "failed" && <span>Error: {error}</span>} */}
-                    <Typography variant="caption" sx={{ fontSize: '15px' }}>
-                      Download to read offline
+                      {formattedDate} • {fileDetail.likeFile} likes • {fileDetail.view} views
                     </Typography>
                   </Stack>
                 </Stack>
-
                 <Stack direction="row" spacing={2} sx={{ margin: '10px' }}>
                   {tags &&
                     tags.map((tag, index) => (

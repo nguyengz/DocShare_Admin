@@ -17,7 +17,6 @@ const ListUser = Loadable(lazy(() => import('pages/components-overview/ListUser'
 const Package = Loadable(lazy(() => import('pages/components-overview/Package')));
 const AboutUser = Loadable(lazy(() => import('pages/components-overview/AboutUser/AboutUser')));
 
-
 // ==============================|| MAIN ROUTING ||============================== //
 
 const MainRoutes = {
