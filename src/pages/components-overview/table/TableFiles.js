@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import SendIcon from '@mui/icons-material/Send';
 import { deletedFile } from 'store/reducers/slices/file';
 import { useDispatch } from 'react-redux';
+import Swal from 'sweetalert2';
 // import { Delete, Edit } from '@mui/icons-material';
 
 // import { fetchUser } from '~/slices/user';
@@ -35,14 +36,21 @@ const TableFiles = (props) => {
     const dataDelete = { user_id: dialogDataDl.userId, file_id: dialogDataDl.id, drive_id: dialogDataDl.link };
     console.log(dataDelete);
     try {
-      const response = await dispatch(deletedFile(dataDelete));
-      console.log(response);
-      // Display success message to user
-      dispatch(setMessage('File deleted successfully'));
+      dispatch(deletedFile(dataDelete));
+      setMessage('File deleted successfully');
+      Swal.fire({
+        title: 'Đang xử lý...',
+        timer: 5000, // Giới hạn thời gian chờ là 10 giây
+        timerProgressBar: true, // Hiển thị thanh tiến trình chờ
+        didOpen: () => {
+          Swal.showLoading(); // Hiển thị icon loading
+        }
+      });
+      setOpenDialogDl(false);
     } catch (error) {
       console.log(error);
       // Display error message to user
-      dispatch(setMessage(error.message || 'An error occurred while deleting the file'));
+      setMessage(error.message || 'An error occurred while deleting the file');
     }
   };
   const handleOpenDialogDl = (row) => {

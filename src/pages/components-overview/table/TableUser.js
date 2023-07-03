@@ -6,8 +6,9 @@ import { Link } from 'react-router-dom';
 import { makeStyles } from '../../../../node_modules/@mui/styles/index';
 import { Switch } from '@mui/material';
 import { putUserActive } from 'store/reducers/slices/user';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import randomColor from 'randomcolor';
+import Swal from 'sweetalert2';
 
 // import { fetchUser } from '~/slices/user';
 
@@ -35,18 +36,19 @@ function Table(props) {
   //   const [createModalOpen, setCreateModalOpen] = useState(false);
   const classes = useStyles();
   const [tableData, setTableData] = useState([]);
-
+  const requestTime = useSelector((state) => state.user.requestTime);
   const [showDialog, setShowDialog] = useState(false);
   const [dialogData, setDialogData] = useState({});
-  const [updatedTableData, setUpdatedTableData] = useState([]);
+  // const [updatedTableData, setUpdatedTableData] = useState([]);
   // const [status, setStatus] = useState(props.data?.enabled);
   // const [fileCount, setFileCount] = useState(0);
+
   useEffect(() => {
     if (tableData) {
       setTableData(props.data);
     }
     // setFileCount(props.data.length); // tính toán số lượng files và cập nhật vào state
-  }, [props.data, tableData]);
+  }, [props.data]);
   // const filesCount = props.data.files.length;
   // const handleDeleteFile = (fileId) => {
   //   const updatedTableData = tableData.filter((file) => file.id !== fileId);
@@ -63,16 +65,24 @@ function Table(props) {
 
   const handleDialogSubmit = (dialogData) => {
     const data = { id: dialogData.id, enabled: !dialogData.enabled };
-    console.log(data);
+    console.log(requestTime);
     try {
       dispatch(putUserActive(data));
+      Swal.fire({
+        title: 'Đang xử lý...',
+        timer: 2000 + requestTime,
+        timerProgressBar: true, // Hiển thị thanh tiến trình chờ
+        didOpen: () => {
+          Swal.showLoading(); // Hiển thị icon loading
+        }
+      });
       const updatedData = tableData.map((row) => {
         if (row.id === dialogData.id) {
           return { ...row, enabled: !row.enabled };
         }
         return row;
       });
-      setUpdatedTableData(updatedData);
+      setTableData(updatedData);
       setShowDialog(false);
     } catch (error) {
       console.error(error);
@@ -172,7 +182,7 @@ function Table(props) {
             size: 120
           }
         }}
-        data={updatedTableData.length > 0 ? updatedTableData : tableData}
+        data={tableData}
         columns={columns}
         columnsOrder={columnsOrder}
         enableEditing
@@ -180,7 +190,7 @@ function Table(props) {
         renderRowActions={({ row }) => (
           <Box sx={{ display: 'flex', gap: '1rem' }}>
             <Tooltip arrow placement="right" title={row.original.enabled ? 'Disable' : 'Enable'}>
-              <Switch defaultChecked={row.original?.enabled} onChange={() => handleToggleActive(row.original)} />
+              <Switch checked={row.original?.enabled} onChange={() => handleToggleActive(row.original)} />
             </Tooltip>
           </Box>
         )}

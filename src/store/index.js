@@ -13,15 +13,13 @@
 // const { dispatch } = store;
 
 // export { store, dispatch };
-import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
-import thunk from 'redux-thunk';
+import { configureStore } from '@reduxjs/toolkit';
 import reducers from './reducers/index';
-
-const middleware = [...getDefaultMiddleware(), thunk];
 
 const store = configureStore({
   reducer: reducers,
-  middleware
+  devTools: true,
+  middleware: (getDefaulMiddleware) => getDefaulMiddleware().concat()
 });
 const { dispatch } = store;
 export { store, dispatch };

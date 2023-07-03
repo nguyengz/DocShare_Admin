@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import fileService from '../services/file.service';
 import { setMessage } from './message';
+import Swal from 'sweetalert2';
 
 export const fetchFileDetail = createAsyncThunk('file/fetchFileDetail', async (data, thunkAPI) => {
   const response = await fileService.fetchFileDetail(data);
@@ -9,12 +10,34 @@ export const fetchFileDetail = createAsyncThunk('file/fetchFileDetail', async (d
 });
 export const deletedFile = createAsyncThunk('file/deletedFile', async (dataDelete, thunkAPI) => {
   try {
+    const startTime = performance.now();
     const response = await fileService.deletedFile(dataDelete);
-    thunkAPI.dispatch(setMessage(response.data.message));
+    const endTime = performance.now(); // Lấy thời gian kết thúc request
+    const requestTime = endTime - startTime;
+    // thunkAPI.dispatch(setRequestTime(requestTime));
+    thunkAPI.dispatch(setMessage(response.data));
+    Swal.fire({
+      icon: 'success',
+      title: response.data,
+      timer: requestTime > 1000 ? requestTime : 1000,
+      showConfirmButton: false
+    });
     return response.data;
   } catch (error) {
-    const errorMessage = error.response ? error.response.data.message : 'An error occurred while deleting the file';
+    const message =
+      (error.response && error.response.data && error.response.data.message) || error.message || error.toString('Error when delete file');
+    const jsonObject = JSON.parse(message.substring(message.indexOf('{')));
+    const errorMessage = jsonObject.message;
+    // const jsonString = JSON.stringify(message);
+    // const errorObject = JSON.parse(jsonString);
+    // const errorMessage = errorObject.message;
     thunkAPI.dispatch(setMessage(errorMessage));
+    Swal.fire({
+      icon: 'error',
+      title: errorMessage,
+      timer: 3000,
+      showConfirmButton: false
+    });
     throw error;
   }
 });

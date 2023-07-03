@@ -31,7 +31,7 @@ const login = (username, password) => {
           icon: 'error',
           title: 'Password or Username failed',
           text: 'Please check infomation again!',
-          timer: 2000,
+          timer: 3000,
           showConfirmButton: false
         });
       }

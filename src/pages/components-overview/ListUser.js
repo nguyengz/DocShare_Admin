@@ -7,7 +7,7 @@ import { fetchUser } from 'store/reducers/slices/user';
 
 function ListUser() {
   const dispatch = useDispatch();
-  let listUsers = useSelector((state) => state.user.listUser);
+  const listUsers = useSelector((state) => state.user.listUser);
 
   useEffect(() => {
     dispatch(fetchUser());
