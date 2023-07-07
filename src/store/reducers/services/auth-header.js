@@ -3,7 +3,7 @@ export default function authHeader() {
 
   if (user && user.token) {
     // // For Spring Boot back-end
-    return { Authorization: 'Bearer ' + user.token };
+    return { Authorization: `Bearer ${user.token}` };
     // for Node.js Express back-end
     // return { "x-access-token": user.token };
   } else {

@@ -18,27 +18,25 @@ export const deletedFile = createAsyncThunk('file/deletedFile', async (dataDelet
     thunkAPI.dispatch(setMessage(response.data));
     Swal.fire({
       icon: 'success',
-      title: response.data,
-      timer: requestTime > 1000 ? requestTime : 1000,
-      showConfirmButton: false
+      title: response.data.message,
+      timer: requestTime > 2000 ? requestTime : 2000
+      // showConfirmButton: false
     });
     return response.data;
   } catch (error) {
-    const message =
-      (error.response && error.response.data && error.response.data.message) || error.message || error.toString('Error when delete file');
-    const jsonObject = JSON.parse(message.substring(message.indexOf('{')));
-    const errorMessage = jsonObject.message;
+    const message = (error.response && error.response.data && error.response.data.message) || error.message || 'Error when delete file';
+    // const jsonObject = JSON.parse(message.substring(message.indexOf('{')));
+    // const errorMessage = jsonObject.message;
     // const jsonString = JSON.stringify(message);
     // const errorObject = JSON.parse(jsonString);
     // const errorMessage = errorObject.message;
-    thunkAPI.dispatch(setMessage(errorMessage));
+
+    thunkAPI.dispatch(setMessage(message));
     Swal.fire({
       icon: 'error',
-      title: errorMessage,
-      timer: 3000,
-      showConfirmButton: false
+      title: message === 'No message available' ? 'Error when delete file' : message,
+      timer: 3000
     });
-    throw error;
   }
 });
 const fileSlice = createSlice({

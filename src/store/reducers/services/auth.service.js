@@ -23,16 +23,15 @@ const login = (username, password) => {
         Swal.fire({
           icon: 'success',
           title: 'Welcome',
-          timer: 1000,
+          timer: 2000,
           showConfirmButton: false
         });
       } else if (response.data.error) {
         Swal.fire({
           icon: 'error',
-          title: 'Password or Username failed',
+          title: 'Do you are Admin?',
           text: 'Please check infomation again!',
-          timer: 3000,
-          showConfirmButton: false
+          timer: 3000
         });
       }
       return response.data;

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Card, Grid, Stack, Typography, Button, Avatar, CircularProgress, Link } from '@mui/material';
+import { Grid, Stack, Typography, Button, Avatar, CircularProgress, Link } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Navigation } from 'swiper';
@@ -102,157 +102,167 @@ function FileDetail() {
 
   return (
     <>
-      <Box>
-        <Card sx={{ margin: '5px' }}>
+      <Grid
+        container
+        sm={10}
+        direction="row"
+        pt={1}
+        justifyContent="center"
+        sx={{
+          margin: 'auto',
+          boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px'
+        }}
+        rowSpacing={4.5}
+        columnSpacing={2.75}
+      >
+        <Grid xs={12} md={10} direction="column">
           <Grid
-            container
-            sm={12}
-            direction="row"
-            pt={1}
-            justifyContent="center"
+            item
             sx={{
-              margin: 'auto'
+              height: 400,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxShadow: '2px 2px 4px rgba(0, 0, 0, 0.4)'
             }}
           >
-            <Grid xs={12} md={10} direction="column">
-              <Grid
-                item
-                sx={{
-                  height: 400,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  boxShadow: '2px 2px 4px rgba(0, 0, 0, 0.4)'
+            {isLoading ? (
+              <CircularProgress /> // show CircularProgress when isLoading is true
+            ) : images && images.length > 0 ? (
+              <Swiper
+                pagination={{
+                  type: 'progressbar'
                 }}
+                navigation={true}
+                modules={[Pagination, Navigation]}
+                className="mySwiper"
+                style={styles.wrapper}
               >
-                {isLoading ? (
-                  <CircularProgress /> // show CircularProgress when isLoading is true
-                ) : images && images.length > 0 ? (
-                  <Swiper
-                    pagination={{
-                      type: 'progressbar'
-                    }}
-                    navigation={true}
-                    modules={[Pagination, Navigation]}
-                    className="mySwiper"
-                    style={styles.wrapper}
-                  >
-                    {images.map((image, idx) => (
-                      <SwiperSlide key={idx} style={styles.imageWrapper}>
-                        <img
-                          id="image-generated"
-                          src={image}
-                          alt="pdfImage"
-                          style={{
-                            display: 'block',
-                            width: width,
-                            height: height,
-                            border: '2px ridge  ',
-                            margin: '5px auto',
-                            boxShadow: '0px 4px 5px 5px rgb(194 219 246)'
-                          }}
-                        />
-                      </SwiperSlide>
-                    ))}
-                  </Swiper>
-                ) : (
-                  <Typography variant="h1" color="initial">
-                    None
-                  </Typography>
-                )}
-              </Grid>
-              <Grid
-                xs={12}
-                sm={8}
-                item
-                mt={1}
-                sx={{
-                  height: 300
-                }}
-                spacing={4}
-              >
-                <Stack sm={8} direction="row" spacing={1} justifyContent="space-between">
-                  <Stack sm={4} item sx={{ marginLeft: '5px' }}>
-                    <Typography
-                      variant="h2"
-                      sx={{
-                        fontSize: '26px',
-                        fontWeight: 150,
-                        wordWrap: 'break-word'
-                      }}
-                    >
-                      {fileDetail.fileName > 100 ? fileDetail.fileName.slice(0, 100) + '...' : fileDetail.fileName}
-                    </Typography>
-                    <Typography variant="caption" sx={{ fontSize: '15px', marginLeft: '10px' }}>
-                      {formattedDate} • {fileDetail.likeFile} likes • {fileDetail.view} views
-                    </Typography>
-                  </Stack>
-                </Stack>
-                <Stack direction="row" spacing={2} sx={{ margin: '10px' }}>
-                  {tags &&
-                    tags.map((tag, index) => (
-                      <Button
-                        key={index}
-                        component={Link}
-                        href={`/`}
-                        sx={{
-                          border: '1px solid',
-                          borderRadius: '56px',
-                          background: '',
-                          padding: '0 16px',
-                          lineHeight: '24px'
-                        }}
-                        label={tag.tagName}
-                      >
-                        {tag.tagName}
-                      </Button>
-                    ))}
-                </Stack>
-                <Stack direction="row" spacing={2}>
-                  <Typography>
-                    Take time to reflect on your career path. Its worth the effort. Full LinkedIn article: http://bit.ly/4Strategies
-                  </Typography>
-                </Stack>
-                <Stack direction="row" spacing={2} sx={{ margin: '10px 10px' }}>
-                  <Stack item>
-                    {' '}
-                    <Avatar
-                      sx={{
-                        width: '50px',
-                        height: '50px'
-                      }}
-                    ></Avatar>
-                  </Stack>
-                  <Stack item>
-                    <Typography
-                      component={Link}
+                {images.map((image, idx) => (
+                  <SwiperSlide key={idx} style={styles.imageWrapper}>
+                    <img
+                      id="image-generated"
+                      src={image}
+                      alt="pdfImage"
                       style={{
-                        marginRight: 'auto',
-                        textDecoration: 'none',
-                        color: '#1976d2'
+                        display: 'block',
+                        width: width,
+                        height: height,
+                        border: '2px ridge  ',
+                        margin: '5px auto',
+                        boxShadow: '0px 4px 5px 5px rgb(194 219 246)'
                       }}
-                      onClick={() => {
-                        // setidlink(page.id);
-                        // alert(page.title);
-                      }}
-                      href={`/About/${fileDetail.userId}`}
-                      key={fileDetail.userId}
-                      onMouseEnter={(e) => {
-                        e.target.style.color = 'blue';
-                      }}
-                      onMouseLeave={(e) => {
-                        e.target.style.color = '1976d2';
-                      }}
-                    >
-                      {fileDetail.userName}
-                    </Typography>
-                  </Stack>
-                </Stack>
-              </Grid>
-            </Grid>
+                    />
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            ) : (
+              <Typography variant="h1" color="initial">
+                None
+              </Typography>
+            )}
           </Grid>
-        </Card>
-      </Box>
+          <Grid
+            xs={12}
+            sm={8}
+            item
+            mt={1}
+            sx={{
+              height: 300
+            }}
+            spacing={4}
+          >
+            <Stack sm={8} direction="row" spacing={1} justifyContent="space-between">
+              <Stack sm={4} item sx={{ marginLeft: '5px' }}>
+                <Typography
+                  variant="h2"
+                  sx={{
+                    fontSize: '26px',
+                    fontWeight: 150,
+                    wordWrap: 'break-word'
+                  }}
+                >
+                  {fileDetail?.fileName > 100 ? fileDetail?.fileName.slice(0, 100) + '...' : fileDetail?.fileName}
+                </Typography>
+                <Typography variant="caption" sx={{ fontSize: '15px', marginLeft: '5px' }}>
+                  {formattedDate} • {fileDetail?.likeFile} likes • {fileDetail?.view} views
+                </Typography>
+              </Stack>
+            </Stack>
+            <Stack direction="row" spacing={2} sx={{ margin: '10px' }}>
+              <Typography variant="caption" sx={{ fontSize: '15px' }}>
+                {fileDetail?.fileType}
+              </Typography>
+
+              <br />
+            </Stack>
+            <Stack direction="row" spacing={2} sx={{ margin: '10px' }}>
+              <Typography variant="caption" sx={{ fontSize: '15px' }}>
+                {fileDetail?.category?.categoryName}
+              </Typography>
+              <br />
+            </Stack>
+
+            <Stack direction="row" spacing={2} sx={{ margin: '10px' }}>
+              {tags &&
+                tags.map((tag, index) => (
+                  <Button
+                    key={index}
+                    sx={{
+                      border: '1px solid',
+                      borderRadius: '56px',
+                      background: '',
+                      padding: '0 16px',
+                      lineHeight: '24px'
+                    }}
+                    label={tag.tagName}
+                  >
+                    {tag.tagName}
+                  </Button>
+                ))}
+            </Stack>
+            <Stack direction="row" spacing={2}>
+              <Typography sx={{ margin: '10px' }}>{fileDetail?.description}</Typography>
+            </Stack>
+            <Stack direction="row" spacing={2} sx={{ margin: '10px 10px' }}>
+              <Stack item>
+                {' '}
+                <Avatar
+                  sx={{
+                    width: '50px',
+                    height: '50px'
+                  }}
+                ></Avatar>
+              </Stack>
+              <Stack item>
+                <Typography
+                  component={Link}
+                  style={{
+                    fontSize: '20px',
+                    marginRight: 'auto',
+                    textDecoration: 'none',
+                    color: '#1976d2'
+                  }}
+                  onClick={() => {
+                    // setidlink(page.id);
+                    // alert(page.title);
+                  }}
+                  href={`/About/${fileDetail?.userId}`}
+                  key={fileDetail?.userId}
+                  onMouseEnter={(e) => {
+                    e.target.style.color = 'blue';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.color = '1976d2';
+                  }}
+                >
+                  {fileDetail?.userName}
+                </Typography>
+              </Stack>
+            </Stack>
+          </Grid>
+        </Grid>
+      </Grid>
     </>
   );
 }

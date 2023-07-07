@@ -3,7 +3,7 @@ import { MaterialReactTable } from 'material-react-table';
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, TextField, Tooltip, Typography } from '@mui/material';
 import { Delete } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
-import SendIcon from '@mui/icons-material/Send';
+// import SendIcon from '@mui/icons-material/Send';
 import { deletedFile } from 'store/reducers/slices/file';
 import { useDispatch } from 'react-redux';
 import Swal from 'sweetalert2';
@@ -29,28 +29,42 @@ const TableFiles = (props) => {
     if (tableData) {
       setTableData(props.data);
     }
-    // setFileCount(props.data.length); // tính toán số lượng files và cập nhật vào state
   }, [props.data, tableData]);
   // const filesCount = props.data.files.length;
   const handleDeleteFile = async (dialogDataDl) => {
     const dataDelete = { user_id: dialogDataDl.userId, file_id: dialogDataDl.id, drive_id: dialogDataDl.link };
     console.log(dataDelete);
     try {
-      dispatch(deletedFile(dataDelete));
       setMessage('File deleted successfully');
-      Swal.fire({
-        title: 'Đang xử lý...',
-        timer: 5000, // Giới hạn thời gian chờ là 10 giây
-        timerProgressBar: true, // Hiển thị thanh tiến trình chờ
-        didOpen: () => {
-          Swal.showLoading(); // Hiển thị icon loading
-        }
-      });
+      // Swal.fire({
+      //   title: 'Đang xử lý...',
+      //   timer: 1000, // Giới hạn thời gian chờ là 10 giây
+      //   timerProgressBar: true, // Hiển thị thanh tiến trình chờ
+      //   didOpen: () => {
+      //     Swal.showLoading(); // Hiển thị icon loading
+      //   }
+      // });
+      await dispatch(deletedFile(dataDelete));
+      if (response.payload !== undefined && response.payload !== null) {
+        // Remove the deleted file from the table data
+        const updatedTableData = tableData.filter((row) => row.id !== dialogDataDl.id);
+        setTableData(updatedTableData);
+
+        setMessage('File deleted successfully');
+      } else {
+        setMessage('An error occurred while deleting the file');
+      }
       setOpenDialogDl(false);
     } catch (error) {
       console.log(error);
       // Display error message to user
       setMessage(error.message || 'An error occurred while deleting the file');
+      Swal.fire({
+        icon: 'error',
+        title: message,
+        timer: 3000
+        // showConfirmButton: false
+      });
     }
   };
   const handleOpenDialogDl = (row) => {
@@ -61,9 +75,9 @@ const TableFiles = (props) => {
   const handleCloseDialogDl = () => {
     setOpenDialogDl(false);
   };
-  const handleOpenDialog = () => {
-    setOpenDialog(true);
-  };
+  // const handleOpenDialog = () => {
+  //   setOpenDialog(true);
+  // };
   const handleCloseDialog = () => {
     setOpenDialog(false);
   };
@@ -227,11 +241,11 @@ const TableFiles = (props) => {
         enableColumnOrdering
         renderRowActions={({ row }) => (
           <Box sx={{ display: 'flex', gap: '1rem' }}>
-            <Tooltip arrow placement="right" title="SendMessage">
+            {/* <Tooltip arrow placement="right" title="SendMessage">
               <IconButton color="primary" onClick={handleOpenDialog}>
                 <SendIcon />
               </IconButton>
-            </Tooltip>
+            </Tooltip> */}
             <Tooltip arrow placement="right" title="Delete">
               <IconButton color="error" onClick={() => handleOpenDialogDl(row.original)}>
                 <Delete />

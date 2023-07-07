@@ -2,70 +2,70 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 // material-ui
 import {
-  Avatar,
+  // Avatar,
   Box,
   Button,
   Grid,
-  List,
-  ListItemAvatar,
-  ListItemButton,
-  ListItemSecondaryAction,
-  ListItemText,
-  MenuItem,
+  // List,
+  // ListItemAvatar,
+  // ListItemButton,
+  // ListItemSecondaryAction,
+  // ListItemText,
+  // MenuItem,
   Stack,
-  TextField,
+  // TextField,
   Typography
 } from '@mui/material';
 
 // project import
-import OrdersTable from './OrdersTable';
+// import OrdersTable from './OrdersTable';
 import IncomeAreaChart from './IncomeAreaChart';
-import MonthlyBarChart from './MonthlyBarChart';
-import ReportAreaChart from './ReportAreaChart';
-import SalesColumnChart from './SalesColumnChart';
+// import MonthlyBarChart from './MonthlyBarChart';
+// import ReportAreaChart from './ReportAreaChart';
+// import SalesColumnChart from './SalesColumnChart';
 import MainCard from 'components/MainCard';
 import AnalyticEcommerce from 'components/cards/statistics/AnalyticEcommerce';
 
 // assets
-import { GiftOutlined, MessageOutlined, SettingOutlined } from '@ant-design/icons';
+// import { GiftOutlined, MessageOutlined, SettingOutlined } from '@ant-design/icons';
 
 // avatar style
-const avatarSX = {
-  width: 36,
-  height: 36,
-  fontSize: '1rem'
-};
+// const avatarSX = {
+//   width: 36,
+//   height: 36,
+//   fontSize: '1rem'
+// };
 
 // action style
-const actionSX = {
-  mt: 0.75,
-  ml: 1,
-  top: 'auto',
-  right: 'auto',
-  alignSelf: 'flex-start',
-  transform: 'none'
-};
+// const actionSX = {
+//   mt: 0.75,
+//   ml: 1,
+//   top: 'auto',
+//   right: 'auto',
+//   alignSelf: 'flex-start',
+//   transform: 'none'
+// };
 
-// sales report status
-const status = [
-  {
-    value: 'today',
-    label: 'Today'
-  },
-  {
-    value: 'month',
-    label: 'This Month'
-  },
-  {
-    value: 'year',
-    label: 'This Year'
-  }
-];
+// // sales report status
+// const status = [
+//   {
+//     value: 'today',
+//     label: 'Today'
+//   },
+//   {
+//     value: 'month',
+//     label: 'This Month'
+//   },
+//   {
+//     value: 'year',
+//     label: 'This Year'
+//   }
+// ];
 
 // ==============================|| DASHBOARD - DEFAULT ||========= ===================== //
 
 const DashboardDefault = () => {
-  const [value, setValue] = useState('today');
+  // const [value, setValue] = useState('today');
   const [slot, setSlot] = useState('week');
   const [dataTotal, setDataTotal] = useState([]);
 
@@ -113,9 +113,7 @@ const DashboardDefault = () => {
       <Grid item xs={12} sm={6} md={7} lg={3}>
         <AnalyticEcommerce title="Total Sales" count={`${dataTotal.total_view}`} percentage={27.4} isLoss color="warning" extra="$20,395" />
       </Grid>
-
       <Grid item md={8} sx={{ display: { sm: 'none', md: 'block', lg: 'none' } }} />
-
       {/* row 2 */}
       <Grid item xs={12} md={7} lg={8}>
         <Grid container alignItems="center" justifyContent="space-between">
@@ -149,7 +147,7 @@ const DashboardDefault = () => {
           </Box>
         </MainCard>
       </Grid>
-      <Grid item xs={12} md={5} lg={4}>
+      {/* <Grid item xs={12} md={5} lg={4}>
         <Grid container alignItems="center" justifyContent="space-between">
           <Grid item>
             <Typography variant="h5">Income Overview</Typography>
@@ -167,10 +165,9 @@ const DashboardDefault = () => {
           </Box>
           <MonthlyBarChart />
         </MainCard>
-      </Grid>
-
+      </Grid> */}
       {/* row 3 */}
-      <Grid item xs={12} md={7} lg={8}>
+      {/* <Grid item xs={12} md={7} lg={8}>
         <Grid container alignItems="center" justifyContent="space-between">
           <Grid item>
             <Typography variant="h5">Recent Orders</Typography>
@@ -180,35 +177,9 @@ const DashboardDefault = () => {
         <MainCard sx={{ mt: 2 }} content={false}>
           <OrdersTable />
         </MainCard>
-      </Grid>
-      <Grid item xs={12} md={5} lg={4}>
-        <Grid container alignItems="center" justifyContent="space-between">
-          <Grid item>
-            <Typography variant="h5">Analytics Report</Typography>
-          </Grid>
-          <Grid item />
-        </Grid>
-        <MainCard sx={{ mt: 2 }} content={false}>
-          <List sx={{ p: 0, '& .MuiListItemButton-root': { py: 2 } }}>
-            <ListItemButton divider>
-              <ListItemText primary="Company Finance Growth" />
-              <Typography variant="h5">+45.14%</Typography>
-            </ListItemButton>
-            <ListItemButton divider>
-              <ListItemText primary="Company Expenses Ratio" />
-              <Typography variant="h5">0.58%</Typography>
-            </ListItemButton>
-            <ListItemButton>
-              <ListItemText primary="Business Risk Cases" />
-              <Typography variant="h5">Low</Typography>
-            </ListItemButton>
-          </List>
-          <ReportAreaChart />
-        </MainCard>
-      </Grid>
-
-      {/* row 4 */}
-      <Grid item xs={12} md={7} lg={8}>
+      </Grid> */}
+      /{/* row 4 */}
+      {/* <Grid item xs={12} md={7} lg={8}>
         <Grid container alignItems="center" justifyContent="space-between">
           <Grid item>
             <Typography variant="h5">Sales Report</Typography>
@@ -331,7 +302,7 @@ const DashboardDefault = () => {
             </ListItemButton>
           </List>
         </MainCard>
-      </Grid>
+      </Grid> */}
     </Grid>
   );
 };

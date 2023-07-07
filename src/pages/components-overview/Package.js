@@ -100,11 +100,11 @@ function Package() {
           </Grid>
         )}
       </Grid>
-      {tiers?.map((tier) => (
+      {tiers.map((tier) => (
         <>
           <Grid
             container
-            key={tier.tiers_id}
+            key={tier?.tiers_id}
             xs={12}
             sm={12}
             spacing={2}
@@ -119,14 +119,14 @@ function Package() {
               sx={{
                 width: '200px',
                 padding: '15px',
-                boxShadow: tier.active ? '0 0 10px rgba(0, 255, 0, 0.5)' : '0 0 10px rgb(255 1 1)'
+                boxShadow: tier?.active ? '0 0 10px rgba(0, 255, 0, 0.5)' : '0 0 10px rgb(255 1 1)'
               }}
             >
               <CardHeader
-                title={tier.name}
-                subheader={tier.subheader}
+                title={tier?.name}
+                subheader={tier?.subheader}
                 titleTypographyProps={{ align: 'center' }}
-                action={tier.name === 'Pro' ? <StarIcon /> : null}
+                action={tier?.name === 'Pro' ? <StarIcon /> : null}
                 subheaderTypographyProps={{
                   align: 'center'
                 }}
@@ -141,7 +141,7 @@ function Package() {
                   }}
                 >
                   <Typography component="h2" variant="h3" color="text.primary">
-                    ${tier.price}
+                    ${tier?.price}
                   </Typography>
                   <Typography variant="h6" color="text.secondary">
                     /mo
@@ -149,10 +149,10 @@ function Package() {
                 </Box>
                 <PricingList>
                   <Typography component="li" variant="subtitle1" align="center">
-                    {tier.dowloads} Download
+                    {tier?.dowloads} Download
                   </Typography>
                   <Typography component="li" variant="subtitle1" align="center">
-                    {tier.storageSize} GB storageSize
+                    {tier?.storageSize} GB storageSize
                   </Typography>
                 </PricingList>
               </CardContent>
@@ -160,34 +160,34 @@ function Package() {
                 <Button
                   fullWidth
                   variant="outlined"
-                  onClick={() => (showDetailsId && isTier === tier.id ? handlClickThongKe(tier) : handleResgisterPackage(tier))}
+                  onClick={() => (showDetailsId && isTier === tier?.id ? handlClickThongKe(tier) : handleResgisterPackage(tier))}
                 >
-                  {showDetailsId && isTier === tier.id ? 'Total' : 'Edit'}
+                  {showDetailsId && isTier === tier?.id ? 'Total' : 'Edit'}
                 </Button>
               </CardActions>
             </PricingCard>
-            {showDetailsId && isTier === tier.id ? (
+            {showDetailsId && isTier === tier?.id ? (
               <Grid item xs={12} sm={9} ml={10}>
                 <Typography variant="h3"> Edit</Typography>
                 <PackageForm initialTier={tier} />
                 <Grid item>
                   <Tooltip arrow placement="right" title={tier.active ? 'Disable' : 'Enable'}>
-                    <Switch defaultChecked={tier.active} onClick={() => handleSwitchChange(tier)} />
-                    {tier.active ? 'Enable' : 'Disable'}
+                    <Switch defaultChecked={tier?.active} onClick={() => handleSwitchChange(tier)} />
+                    {tier?.active ? 'Enable' : 'Disable'}
                   </Tooltip>
                 </Grid>
               </Grid>
             ) : (
               <Grid item xs={12} sm={9} ml={10}>
-                <Typography> Total: 12 user</Typography>
-                <Typography> Oder: 12 Oder</Typography>
+                <Typography> Total: user</Typography>
+                <Typography> Oder: {tier?.orderCount} Oder</Typography>
                 <Typography> Sales: 12 sales</Typography>
               </Grid>
             )}
             <Dialog open={showDialog} onClose={() => handleDialogClose(tier.id)}>
-              <DialogTitle>{tier.active ? 'Disable' : 'Enable'} User</DialogTitle>
+              <DialogTitle>{tier?.active ? 'Disable' : 'Enable'} User</DialogTitle>
               <DialogContent>
-                <p>Are you sure you want to {tier.active ? 'disable' : 'enable'} the package?</p>
+                <p>Are you sure you want to {tier?.active ? 'disable' : 'enable'} the package?</p>
               </DialogContent>
               <DialogActions>
                 <Button onClick={handleDialogClose}>Cancel</Button>

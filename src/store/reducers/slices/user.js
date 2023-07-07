@@ -30,9 +30,9 @@ export const putUserActive = createAsyncThunk('user/putUserActive', async (data,
     thunkAPI.dispatch(setRequestTime(requestTime));
     Swal.fire({
       icon: 'success',
-      title: 'User status updated successfully',
-      timer: 2000,
-      showConfirmButton: false
+      title: response.data.message,
+      timer: 3000
+      // showConfirmButton: false
     });
     const updatedUser = response.data;
     const updatedListUser = thunkAPI.getState().user.listUser.map((user) => {

@@ -4,6 +4,7 @@ import { lazy } from 'react';
 import Loadable from 'components/Loadable';
 import MainLayout from 'layout/MainLayout';
 import FileDetail from 'pages/components-overview/FileDetail/FileDetail';
+import PrivateRoute from './PrivateRoute';
 
 // render - dashboard
 const DashboardDefault = Loadable(lazy(() => import('pages/dashboard')));
@@ -25,36 +26,69 @@ const MainRoutes = {
   children: [
     {
       path: '/',
-      element: <DashboardDefault />
+      element: (
+        <PrivateRoute>
+          {' '}
+          <DashboardDefault />
+        </PrivateRoute>
+      )
     },
     {
       path: 'Package',
-      element: <Package />
+      element: (
+        <PrivateRoute>
+          <Package />
+        </PrivateRoute>
+      )
     },
     {
       path: 'fileDetail/:id',
-      element: <FileDetail />
+      element: (
+        <PrivateRoute>
+          {' '}
+          <FileDetail />
+        </PrivateRoute>
+      )
     },
     {
       path: 'dashboard',
       children: [
         {
           path: 'default',
-          element: <DashboardDefault />
+          element: (
+            <PrivateRoute>
+              {' '}
+              <DashboardDefault />
+            </PrivateRoute>
+          )
         }
       ]
     },
     {
       path: 'AllFiles',
-      element: <AllFiles />
+      element: (
+        <PrivateRoute>
+          {' '}
+          <AllFiles />
+        </PrivateRoute>
+      )
     },
     {
       path: 'ListUser',
-      element: <ListUser />
+      element: (
+        <PrivateRoute>
+          {' '}
+          <ListUser />
+        </PrivateRoute>
+      )
     },
     {
       path: 'AboutUser/:id',
-      element: <AboutUser />
+      element: (
+        <PrivateRoute>
+          <AboutUser />
+        </PrivateRoute>
+      )
     }
   ]
 };

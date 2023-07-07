@@ -76,7 +76,7 @@ function AboutUser() {
     navigate(`/fileDetail/${todo.id}`);
   };
   return (
-    <Box sx={{ minHeight: '1000px', margin: '1px', background: '#f2f2f2' }}>
+    <Box sx={{ minHeight: '1000px', margin: '1px', background: '#f2f2f2', boxShadow: 'rgba(3, 102, 214, 0.3) 0px 0px 0px 3px' }}>
       <Grid container sm={10} spacing={2} direction="column" style={style.gridUser}>
         <Grid item md={6} spacing={2} gap={1} mt={2}>
           <Stack direction="row" sx={{ flex: 2, alignItems: 'center' }}>
@@ -91,19 +91,19 @@ function AboutUser() {
             </Stack>
             <Box sx={{ flex: 1 }}>
               <Typography variant="h5">{userAbout?.username}</Typography>
-              <Stack direction="row" spacing={30}>
-                <Stack item>
+              <Stack direction="row" spacing={20}>
+                <Stack item ml={1}>
                   <Item>
-                    <Typography>Username:</Typography>
+                    <Typography> Username:{userAbout?.name} </Typography>
                   </Item>
                   <Item>
-                    <Typography>Email:</Typography>
+                    <Typography> Email: {userAbout?.email}</Typography>
                   </Item>
                   <Item>
-                    <Typography>Phone:</Typography>
+                    <Typography> Phone: {userAbout?.phone}</Typography>
                   </Item>
                   <Item>
-                    <Typography>Facebook</Typography>
+                    <Typography> Social: {userAbout?.linksocial}</Typography>
                   </Item>
                 </Stack>
                 <Stack item>
@@ -202,6 +202,14 @@ function AboutUser() {
                 </Stack>
               </Stack>
             </Box>
+          </Stack>
+          <Stack item mt={5}>
+            <Typography variant="h5" color="initial">
+              About:{' '}
+            </Typography>
+            <Typography variant="body1" color="initial">
+              {userAbout?.about}{' '}
+            </Typography>
           </Stack>
           <Stack item mt={10}>
             <TagList userAbout={userAbout} />

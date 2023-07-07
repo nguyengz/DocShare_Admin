@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types';
 
 // material-ui
-import { Box, Grid } from '@mui/material';
+import { Box, Grid, Typography } from '@mui/material';
 
 // project import
 import AuthCard from './AuthCard';
-import Logo from 'components/Logo';
+// import Logo from 'components/Logo';
 
 // assets
 import AuthBackground from 'assets/images/auth/AuthBackground';
@@ -24,7 +24,9 @@ const AuthWrapper = ({ children }) => (
       }}
     >
       <Grid item xs={12} sx={{ ml: 3, mt: 1 }}>
-        <Logo />
+        <Typography variant="h1" color="initial">
+          DocShare
+        </Typography>
       </Grid>
       <Grid item xs={12}>
         <Grid

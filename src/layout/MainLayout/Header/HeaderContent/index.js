@@ -4,7 +4,7 @@ import { Box, useMediaQuery, Button } from '@mui/material';
 // project import
 import Search from './Search';
 import Profile from './Profile';
-import Notification from './Notification';
+// import Notification from './Notification';
 import MobileSection from './MobileSection';
 import { useSelector } from 'react-redux';
 
@@ -17,8 +17,6 @@ const HeaderContent = () => {
     <>
       {!matchesXs && <Search />}
       {matchesXs && <Box sx={{ width: '100%', ml: 1 }} />}
-
-      <Notification />
       {currentUser ? (
         <Profile />
       ) : (

@@ -45,6 +45,7 @@ const MainDrawer = ({ open, handleDrawerToggle, window }) => {
               width: drawerWidth,
               borderRight: `1px solid ${theme.palette.divider}`,
               backgroundImage: 'none',
+              background: 'blue',
               boxShadow: 'inherit'
             }
           }}
