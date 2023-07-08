@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 // import SendIcon from '@mui/icons-material/Send';
 import { deletedFile } from 'store/reducers/slices/file';
 import { useDispatch } from 'react-redux';
-import Swal from 'sweetalert2';
+
 // import { Delete, Edit } from '@mui/icons-material';
 
 // import { fetchUser } from '~/slices/user';
@@ -44,7 +44,7 @@ const TableFiles = (props) => {
       //     Swal.showLoading(); // Hiển thị icon loading
       //   }
       // });
-      await dispatch(deletedFile(dataDelete));
+      const response = await dispatch(deletedFile(dataDelete));
       if (response.payload !== undefined && response.payload !== null) {
         // Remove the deleted file from the table data
         const updatedTableData = tableData.filter((row) => row.id !== dialogDataDl.id);
@@ -56,15 +56,10 @@ const TableFiles = (props) => {
       }
       setOpenDialogDl(false);
     } catch (error) {
-      console.log(error);
       // Display error message to user
       setMessage(error.message || 'An error occurred while deleting the file');
-      Swal.fire({
-        icon: 'error',
-        title: message,
-        timer: 3000
-        // showConfirmButton: false
-      });
+
+      setOpenDialogDl(false);
     }
   };
   const handleOpenDialogDl = (row) => {

@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { setMessage } from './message';
 import AuthService from '../services/auth.service';
+import Swal from 'sweetalert2';
 
 const user = JSON.parse(localStorage.getItem('user'));
 
@@ -22,10 +23,16 @@ export const login = createAsyncThunk('auth/login', async ({ username, password 
     const data = await AuthService.login(username, password);
     return { user: data };
   } catch (error) {
-    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+    const message = error.response.data || error.response.data.message || error.toString();
     thunkAPI.dispatch(setMessage(message));
-    return thunkAPI.rejectWithValue();
+    Swal.fire({
+      icon: 'error',
+      title: message,
+      text: 'Please check infomation again!',
+      timer: 3000
+    });
   }
+  return thunkAPI.rejectWithValue();
 });
 
 export const logout = createAsyncThunk('auth/logout', async () => {

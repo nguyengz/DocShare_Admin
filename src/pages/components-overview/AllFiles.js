@@ -4,12 +4,13 @@ import { Box, Grid } from '@mui/material';
 
 import Table from './table/TableFiles';
 import axios from '../../../node_modules/axios/index';
+import authHeader from 'store/reducers/services/auth-header';
 
 function AllFiles() {
   const [listAllFiles, setlistAllFiles] = useState([]);
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/file/ListFiles`)
+      .get(`http://localhost:8080/file/ListFiles/Admin`, { headers: authHeader() })
       .then((response) => {
         // Handle successful response
         setlistAllFiles(response.data);
