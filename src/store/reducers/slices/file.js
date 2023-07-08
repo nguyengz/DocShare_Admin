@@ -18,7 +18,7 @@ export const deletedFile = createAsyncThunk('file/deletedFile', async (dataDelet
     thunkAPI.dispatch(setMessage(response.data));
     Swal.fire({
       icon: 'success',
-      title: response.data.message,
+      title: response.data,
       timer: requestTime > 2000 ? requestTime : 2000
       // showConfirmButton: false
     });

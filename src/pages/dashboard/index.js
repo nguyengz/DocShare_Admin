@@ -25,7 +25,7 @@ import IncomeAreaChart from './IncomeAreaChart';
 // import SalesColumnChart from './SalesColumnChart';
 import MainCard from 'components/MainCard';
 import AnalyticEcommerce from 'components/cards/statistics/AnalyticEcommerce';
-import authHeader from 'store/reducers/services/auth-header';
+// import authHeader from 'store/reducers/services/auth-header';
 
 // assets
 // import { GiftOutlined, MessageOutlined, SettingOutlined } from '@ant-design/icons';
@@ -73,7 +73,7 @@ const DashboardDefault = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await axios.get('http://localhost:8080/order/statistics', { headers: authHeader() });
+        const response = await axios.get('http://localhost:8080/order/statistics');
         setDataTotal(response.data);
       } catch (error) {
         console.error(error);
