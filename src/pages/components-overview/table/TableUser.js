@@ -54,6 +54,7 @@ function Table(props) {
   //   const updatedTableData = tableData.filter((file) => file.id !== fileId);
   //   setTableData(updatedTableData);
   // };
+
   const handleToggleActive = (row) => {
     setDialogData(row); // store the row data in state
     setShowDialog(true); // show the dialog box; // save the initial enabled state
