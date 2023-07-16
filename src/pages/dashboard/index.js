@@ -109,10 +109,20 @@ const DashboardDefault = () => {
         />
       </Grid>
       <Grid item xs={12} sm={6} md={7} lg={3}>
-        <AnalyticEcommerce title="Total Like" count={5} percentage={27.4} isLoss color="warning" extra="$20,395" />
+        <AnalyticEcommerce title="Total Like" count={`${dataTotal.total_like}`} percentage={27.4} isLoss color="warning" extra="$20,395" />
       </Grid>
       <Grid item xs={12} sm={6} md={7} lg={3}>
-        <AnalyticEcommerce title="Total Sales" count={10} percentage={27.4} isLoss color="warning" extra="$20,395" />
+        <AnalyticEcommerce
+          title="Total Download"
+          count={`${dataTotal.total_dowload}`}
+          percentage={27.4}
+          isLoss
+          color="warning"
+          extra="$20,395"
+        />
+      </Grid>
+      <Grid item xs={12} sm={6} md={7} lg={3}>
+        <AnalyticEcommerce title="Total Files" count={`${dataTotal.total_file}`} percentage={27.4} isLoss color="warning" extra="$20,395" />
       </Grid>
       <Grid item md={8} sx={{ display: { sm: 'none', md: 'block', lg: 'none' } }} />
       {/* row 2 */}
