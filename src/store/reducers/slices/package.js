@@ -30,8 +30,14 @@ export const addPackage = createAsyncThunk('packages/addPackage', async (package
     return response.data;
   } catch (error) {
     // set error message
-    thunkAPI.dispatch(setMessage({ text: 'Error adding package!', success: false }));
-
+    const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+    thunkAPI.dispatch(setMessage({ message, success: false }));
+    Swal.fire({
+      icon: 'error',
+      title: message,
+      timer: 2000,
+      showConfirmButton: false
+    });
     return thunkAPI.rejectWithValue();
   }
 });
@@ -48,6 +54,12 @@ export const putPackageActive = createAsyncThunk('packages/putPackageActive', as
     return response.data;
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+    Swal.fire({
+      icon: 'error',
+      title: message,
+      timer: 2000,
+      showConfirmButton: false
+    });
     thunkAPI.dispatch(setMessage(message));
     return thunkAPI.rejectWithValue();
   }
@@ -65,6 +77,12 @@ export const updatePackage = createAsyncThunk('packages/updatePackage', async (u
   } catch (error) {
     const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
     thunkAPI.dispatch(setMessage(message));
+    Swal.fire({
+      icon: 'error',
+      title: message,
+      timer: 2000,
+      showConfirmButton: false
+    });
     return thunkAPI.rejectWithValue();
   }
 });

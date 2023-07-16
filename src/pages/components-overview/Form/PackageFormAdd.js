@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, TextField, Button } from '@mui/material';
+import { Grid, TextField, Button, Checkbox, FormControlLabel } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { addPackage } from 'store/reducers/slices/package';
 import { Formik, Form } from 'formik';
@@ -11,12 +11,14 @@ const PackageFormAdd = () => {
     const data = {
       name: values.name,
       duration: values.duration,
-      price: values.price,
+      price: values.chargedPerUpload ? 0 : values.price,
       dowloads: values.dowloads,
-      storageSize: values.cloud
+      storageSize: values.cloud,
+      type: values.chargedPerUpload
     };
 
     try {
+      console.log(data);
       await dispatch(addPackage(data));
       // Update the state with the updated package data
       // setInitialTier(data);
@@ -34,24 +36,30 @@ const PackageFormAdd = () => {
         duration: '',
         price: '',
         dowloads: '',
-        cloud: ''
+        cloud: '',
+        chargedPerUpload: false
       }}
       validationSchema={Yup.object().shape({
         name: Yup.string().max(255).required('Name is required'),
-        duration: Yup.string().required('Description is required'),
-        price: Yup.number().required('Price is required').positive('Price must be a positive number'),
-        dowloads: Yup.number()
+        duration: Yup.number()
           .min(0, 'Download must be at least 0')
-          .max(50, 'Download must be at most 50')
           .required('Download is required')
           .positive('Download must be a positive number')
           .integer('Download must be an integer'),
+        price: Yup.number().when('chargedPerUpload', {
+          is: true,
+          then: Yup.number().equals([0], 'Price must be 0 when charged per upload'),
+          otherwise: Yup.number().required('Price is required').moreThan(-1, 'Price must be a positive number or 0')
+        }),
+        dowloads: Yup.number()
+          .min(0, 'Download must be a non-negative integer')
+          .required('Download is required')
+          .test('is-integer', 'Download must be an integer', (value) => Number.isInteger(value)),
         cloud: Yup.number()
           .min(0, 'Download must be at least 0')
           .max(50, 'Download must be at most 50')
           .required('Cloud size is required')
           .positive('Cloud size must be a positive number')
-          .integer('Cloud size must be an integer')
       })}
       onSubmit={handleSubmit}
     >
@@ -88,12 +96,13 @@ const PackageFormAdd = () => {
                   label="Price"
                   type="number"
                   name="price"
-                  value={values.price}
+                  value={values.chargedPerUpload ? 0 : values.price}
                   onChange={handleChange}
                   onBlur={handleBlur}
                   error={Boolean(touched.price && errors.price)}
                   helperText={touched.price && errors.price}
                   sx={{ width: '200px' }}
+                  disabled={values.chargedPerUpload}
                 />
               </Grid>
             </Grid>
@@ -124,6 +133,12 @@ const PackageFormAdd = () => {
                   helperText={touched.cloud && errors.cloud}
                   inputProps={{ min: 0, max: 50 }}
                   sx={{ width: '200px' }}
+                />
+              </Grid>
+              <Grid item>
+                <FormControlLabel
+                  control={<Checkbox checked={values.chargedPerUpload} onChange={handleChange} name="chargedPerUpload" />}
+                  label="Charged per upload"
                 />
               </Grid>
             </Grid>
