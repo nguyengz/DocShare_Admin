@@ -4,9 +4,10 @@ import { useDispatch } from 'react-redux';
 import { addPackage } from 'store/reducers/slices/package';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
+import Swal from 'sweetalert2';
 const PackageFormAdd = () => {
   const dispatch = useDispatch();
-
+  // const [download, setdownload] = useState('');
   const handleSubmit = async (values, { setSubmitting }) => {
     const data = {
       name: values.name,
@@ -28,7 +29,20 @@ const PackageFormAdd = () => {
       setSubmitting(false);
     }
   };
-
+  const hanldChangeDownload = (download) => {
+    if (download === '0') {
+      Swal.fire({
+        title: 'Are you sure set download = 0?',
+        text: 'If the download is set to 0, the download count will be unlimited !',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, continue!'
+        // showConfirmButton: false
+      });
+    }
+  };
   return (
     <Formik
       initialValues={{
@@ -48,11 +62,11 @@ const PackageFormAdd = () => {
           .integer('Download must be an integer'),
         price: Yup.number().when('chargedPerUpload', {
           is: true,
-          then: Yup.number().equals([0], 'Price must be 0 when charged per upload'),
-          otherwise: Yup.number().required('Price is required').moreThan(-1, 'Price must be a positive number or 0')
+          then: Yup.number().equals([0], 'Price must be 0 when Exchange package'),
+          otherwise: Yup.number().test('not-empty', 'Price must not be equal to 0 when it is not Exchange package', (val) => val > 0)
         }),
         dowloads: Yup.number()
-          .min(0, 'Download must be a non-negative integer')
+          .moreThan(-1, 'Price must be a positive number or 0')
           .required('Download is required')
           .test('is-integer', 'Download must be an integer', (value) => Number.isInteger(value)),
         cloud: Yup.number()
@@ -81,7 +95,7 @@ const PackageFormAdd = () => {
               </Grid>
               <Grid item>
                 <TextField
-                  label="Description"
+                  label="Description (day)"
                   name="duration"
                   value={values.duration}
                   onChange={handleChange}
@@ -96,7 +110,7 @@ const PackageFormAdd = () => {
                   label="Price"
                   type="number"
                   name="price"
-                  value={values.chargedPerUpload ? 0 : values.price}
+                  value={values.price}
                   onChange={handleChange}
                   onBlur={handleBlur}
                   error={Boolean(touched.price && errors.price)}
@@ -113,17 +127,20 @@ const PackageFormAdd = () => {
                   type="number"
                   name="dowloads"
                   value={values.dowloads}
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    handleChange(e);
+                    hanldChangeDownload(e.target.value);
+                  }}
                   onBlur={handleBlur}
                   error={Boolean(touched.dowloads && errors.dowloads)}
                   helperText={touched.dowloads && errors.dowloads}
-                  inputProps={{ min: 0, max: 50 }}
+                  inputProps={{ max: 50 }}
                   sx={{ width: '200px' }}
                 />
               </Grid>
               <Grid item>
                 <TextField
-                  label="Cloud"
+                  label="Cloud (MB)"
                   type="number"
                   name="cloud"
                   value={values.cloud}
@@ -138,7 +155,7 @@ const PackageFormAdd = () => {
               <Grid item>
                 <FormControlLabel
                   control={<Checkbox checked={values.chargedPerUpload} onChange={handleChange} name="chargedPerUpload" />}
-                  label="Charged per upload"
+                  label="Exchange package"
                 />
               </Grid>
             </Grid>

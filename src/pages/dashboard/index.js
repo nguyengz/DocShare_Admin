@@ -67,7 +67,7 @@ import AnalyticEcommerce from 'components/cards/statistics/AnalyticEcommerce';
 
 const DashboardDefault = () => {
   // const [value, setValue] = useState('today');
-  const [slot, setSlot] = useState('week');
+  const [slot, setSlot] = useState('month');
   const [dataTotal, setDataTotal] = useState([]);
   // const [dataTotal, setDataTotal] = useState([]);
   useEffect(() => {

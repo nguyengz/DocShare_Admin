@@ -179,9 +179,8 @@ function Package() {
               </Grid>
             ) : (
               <Grid item xs={12} sm={9} ml={10}>
-                <Typography> Total: user</Typography>
-                <Typography> Oder: {tier?.orderCount} Oder</Typography>
-                <Typography> Sales: 12 sales</Typography>
+                <Typography> TotalOder: {tier?.orderCount} TotalOder</Typography>
+                <Typography> TotalSales: {tier?.sumOrder} TotalSales</Typography>
               </Grid>
             )}
             <Dialog open={showDialog} onClose={() => handleDialogClose(tier.id)}>

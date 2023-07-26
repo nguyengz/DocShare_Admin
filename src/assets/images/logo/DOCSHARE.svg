@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1000 1000">
+    <defs>
+        <style>.cls-1{fill:url(#linear-gradient);}.cls-2,.cls-3{fill:#fff;}.cls-3{font-size:64.02px;font-family:SVN-Avengeance;letter-spacing:0.19em;}.cls-4{letter-spacing:0.17em;}.cls-5{letter-spacing:0.19em;}.cls-6{letter-spacing:0.17em;}.cls-7{letter-spacing:0.13em;}</style>
+        <linearGradient id="linear-gradient" x1="-105.7" y1="500" x2="1159.64" y2="500" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#00aeef"/>
+            <stop offset="0.15" stop-color="#02a8eb"/>
+            <stop offset="0.34" stop-color="#0898de"/>
+            <stop offset="0.56" stop-color="#127dca"/>
+            <stop offset="0.8" stop-color="#2057ae"/>
+            <stop offset="1" stop-color="#2e3192"/>
+        </linearGradient>
+    </defs>
+    <title>DOCSHARE</title>
+    <g id="Layer_2" data-name="Layer 2">
+        <g id="Layer_1-2" data-name="Layer 1">
+            <rect class="cls-1" width="1000" height="1000"/>
+            <path class="cls-2" d="M401.67,450.49H297.5l8.1-46H409.78Zm163.88-68.94H445.24l-9.36,46H556.19Zm22.3-38.29c7.5,2.32,36.93,12.39,49,40.51A65.47,65.47,0,0,1,642,408.62c1.5,43.78-30.48,75.46-34.55,79.32A115,115,0,0,1,554.66,516l-107.75,1.87q3.45-19.83,6.88-39.68h-96q-3.48,20.79-7,41.58l54.09,0-10.5,41.55,150.06-.09c16.56-2.18,51-9.17,82.72-36a154.71,154.71,0,0,0,31.66-36.9,130,130,0,0,0,25-53A126.62,126.62,0,0,0,685.81,393c-1.54-12.14-5-39.32-26.81-62.81-21.27-22.88-47.52-28.83-57.45-30.55l-119.87,0Q479,311,476.32,322.19l-76.6.26q-3.44,21.6-6.89,43.21l118.34-.19q2.43-11.14,4.85-22.28Z"/>
+            <text class="cls-3" transform="translate(330.55 667.59)">D<tspan class="cls-4" x="42.7" y="0">O</tspan>
+                <tspan class="cls-5" x="84.25" y="0">C</tspan>
+                <tspan class="cls-6" x="124.07" y="0">S</tspan>
+                <tspan class="cls-7" x="164.15" y="0">HA</tspan>
+                <tspan class="cls-5" x="250.83" y="0">R</tspan>
+                <tspan class="cls-7" x="293.27" y="0">E</tspan>
+            </text>
+        </g>
+    </g>
+</svg>

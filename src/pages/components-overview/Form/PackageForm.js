@@ -171,7 +171,7 @@ const PackageForm = ({ initialTier }) => {
                   </Grid>
                   <Grid item>
                     <Typography variant="caption" color="initial">
-                      {initialTier?.type === 2 ? 'Type: Charged per upload' : initialTier?.type === 1 ? 'Type: Limit' : 'Type: Unlimit'}
+                      {initialTier?.type === 2 ? 'Type: Exchange package' : initialTier?.type === 1 ? 'Type: Limit' : 'Type: Unlimit'}
                     </Typography>
                   </Grid>
                 </Grid>

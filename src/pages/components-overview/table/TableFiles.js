@@ -116,7 +116,7 @@ const TableFiles = (props) => {
     [validationErrors]
   );
 
-  const columnsOrder = ['fileName', 'userName', 'category', 'uploadDate', 'view', 'likeFile', 'repostCount', 'tags'];
+  const columnsOrder = ['fileName', 'userName', 'category', 'uploadDate', 'view', 'likeFile', 'totalDownload', 'tags'];
   function formatDateTime(dateTimeString) {
     const dateTime = new Date(dateTimeString);
     const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
@@ -189,8 +189,8 @@ const TableFiles = (props) => {
         })
       },
       {
-        accessorKey: 'repostCount',
-        header: 'Reported',
+        accessorKey: 'totalDownload',
+        header: 'Download',
         size: 50,
         width: '20%',
         enableSorting: true,

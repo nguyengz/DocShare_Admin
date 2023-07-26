@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
 
 // material-ui
-import { Box, Grid, Typography } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 
 // project import
 import AuthCard from './AuthCard';
 // import Logo from 'components/Logo';
-
+import docshare from 'assets/images/logo/DOCSHARE copy.svg';
 // assets
 import AuthBackground from 'assets/images/auth/AuthBackground';
 
@@ -23,10 +23,8 @@ const AuthWrapper = ({ children }) => (
         minHeight: '100vh'
       }}
     >
-      <Grid item xs={12} sx={{ ml: 3, mt: 1 }}>
-        <Typography variant="h1" color="initial">
-          DocShare
-        </Typography>
+      <Grid item xs={12} sx={{ ml: 5, mt: 0.5 }}>
+        <img src={docshare} alt="" width="5%" height="5%" />
       </Grid>
       <Grid item xs={12}>
         <Grid

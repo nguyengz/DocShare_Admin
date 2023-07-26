@@ -1,9 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { MaterialReactTable } from 'material-react-table';
-import { Avatar, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, TableCell, Tooltip } from '@mui/material';
+import { Avatar, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Tooltip } from '@mui/material';
 // import { Delete, Edit } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
-import { makeStyles } from '../../../../node_modules/@mui/styles/index';
 import { Switch } from '@mui/material';
 import { putUserActive } from 'store/reducers/slices/user';
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,26 +14,11 @@ import Swal from 'sweetalert2';
 // import { useEffect } from 'react';
 // import { format } from 'date-fns';
 // import moment from 'moment/moment';
-const useStyles = makeStyles(() => ({
-  circle: {
-    display: 'inline-block',
-    width: '10px',
-    height: '10px',
-    borderRadius: '50%',
-    marginRight: '5px'
-  },
-  green: {
-    backgroundColor: 'green'
-  },
-  red: {
-    backgroundColor: 'red'
-  }
-}));
 
 function Table(props) {
   const dispatch = useDispatch();
   //   const [createModalOpen, setCreateModalOpen] = useState(false);
-  const classes = useStyles();
+
   const [tableData, setTableData] = useState([]);
   const requestTime = useSelector((state) => state.user.requestTime);
   const [showDialog, setShowDialog] = useState(false);
@@ -42,7 +26,13 @@ function Table(props) {
   // const [updatedTableData, setUpdatedTableData] = useState([]);
   // const [status, setStatus] = useState(props.data?.enabled);
   // const [fileCount, setFileCount] = useState(0);
-
+  // function formatBytes(bytes) {
+  //   if (bytes === 0) return '0 Bytes';
+  //   const k = 1024;
+  //   const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+  //   const i = Math.floor(Math.log(bytes) / Math.log(k));
+  //   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+  // }
   useEffect(() => {
     if (tableData) {
       setTableData(props.data);
@@ -103,7 +93,7 @@ function Table(props) {
   //     const date = moment.utc(dateString).toDate();
   //     return format(date, 'dd/MM/yyyy HH:mm:ss');
   //   };
-  const columnsOrder = ['avatar', 'username', 'email', 'enabled', 'maxUpload', 'files'];
+  const columnsOrder = ['avatar', 'username', 'email', 'maxUpload', 'files'];
 
   const columns = useMemo(() => [
     {
@@ -130,17 +120,7 @@ function Table(props) {
       header: 'Email',
       size: 50
     },
-    {
-      accessorKey: 'enabled',
-      header: 'Enabled',
-      size: 50,
-      Cell: ({ row }) => (
-        <TableCell>
-          <span className={`${classes.circle} ${row?.original?.enabled ? classes.green : classes.red}`} />
-          {row.original?.enabled ? 'Enabled' : 'Disabled'}
-        </TableCell>
-      )
-    },
+
     // {
     //   accessorKey: 'files',
     //   header: 'Files',
@@ -153,10 +133,10 @@ function Table(props) {
     // },
     {
       accessorKey: 'maxUpload',
-      header: 'maxUpload',
+      header: 'StorageSize',
       size: 50,
-      enableSorting: true
-      // Cell: ({ cell }) => formatDate(cell.value),
+      enableSorting: true,
+      Cell: ({ row }) => row.original?.maxUpload.toFixed(2) + ' MB'
     },
     {
       accessorKey: 'files',

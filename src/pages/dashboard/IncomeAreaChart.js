@@ -38,7 +38,16 @@ const IncomeAreaChart = ({ slot }) => {
 
   const [options, setOptions] = useState(areaChartOptions);
   const [dataMonthPrices, setDataMonthPrices] = useState([]);
-  const data = [];
+  const [chartData, setChartData] = useState({
+    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+    series: [
+      {
+        name: 'Sales',
+        data: [0, 86, 28, 115, 48, 210, 136, 0, 0, 0, 0, 0]
+      }
+    ]
+  });
+
   useEffect(() => {
     async function fetchDataMonthPrices() {
       try {
@@ -51,6 +60,7 @@ const IncomeAreaChart = ({ slot }) => {
 
     fetchDataMonthPrices();
   }, []);
+
   useEffect(() => {
     const monthLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     const dayLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
@@ -97,46 +107,34 @@ const IncomeAreaChart = ({ slot }) => {
         theme: 'light'
       }
     }));
+    const chartDataCopy = { ...chartData };
     for (let i = 0; i < monthLabels.length; i++) {
       const targetMonth = i + 1;
 
       const matchingPrice = dataMonthPrices.find(([month]) => month === targetMonth);
 
       if (matchingPrice) {
-        data.push(matchingPrice[1]);
+        chartDataCopy.series[0].data[i] = matchingPrice[1];
       } else {
-        data.push(0);
+        chartDataCopy.series[0].data[i] = 0;
       }
     }
-    console.log(data);
-  }, [primary, secondary, line, theme, slot]);
-
-  const [series, setSeries] = useState([
-    {
-      name: 'Page Views',
-      data: [0, 86, 28, 115, 48, 210, 136]
-    },
-    {
-      name: 'Sessions',
-      data: [0, 43, 14, 56, 24, 105, 68]
-    }
-  ]);
+    setChartData(chartDataCopy);
+  }, [primary, secondary, line, theme, slot, dataMonthPrices]);
 
   useEffect(() => {
-    setSeries([
-      {
-        name: 'Sales',
-        data: slot === 'month' ? data : [31, 40, 28, 51, 42, 109, 100]
-      },
-      {
-        name: 'Sessions',
-        data: slot === 'month' ? [110, 60, 150, 35, 60, 36, 26, 45, 65, 52, 53, 41] : [11, 32, 45, 32, 34, 52, 41]
-      }
-    ]);
-    // console.log(series);
+    setChartData({
+      ...chartData,
+      series: [
+        {
+          name: 'Sales',
+          data: slot === 'month' ? chartData.series[0].data : [0, 0, 0, 0, 0, 0, 0]
+        }
+      ]
+    });
   }, [slot]);
 
-  return <ReactApexChart options={options} series={series} type="area" height={450} />;
+  return <ReactApexChart options={options} series={chartData.series} type="area" height={450} width="100%" />;
 };
 
 IncomeAreaChart.propTypes = {
