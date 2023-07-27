@@ -152,7 +152,8 @@ function Package() {
                     {tier?.dowloads} Download
                   </Typography>
                   <Typography component="li" variant="subtitle1" align="center">
-                    {tier?.storageSize} GB storageSize
+                    {tier?.storageSize > 1024 || tier?.storageSize === 1024 ? tier.storageSize / 1024 + ' GB' : tier?.storageSize + ' MB'}{' '}
+                    storageSize
                   </Typography>
                 </PricingList>
               </CardContent>
