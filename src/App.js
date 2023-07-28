@@ -1,28 +1,34 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Routes from 'routes';
 import ThemeCustomization from 'themes';
 import ScrollTop from 'components/ScrollTop';
 
 const App = () => {
-  useEffect(() => {
-    // Check if the page is being unloaded due to a page refresh or due to the page being closed
-    const handleBeforeUnload = (event) => {
-      if (!event.persisted) {
-        event.preventDefault();
-        event.returnValue = '';
-        // Remove the data from local storage if the page is being closed or the browser is being closed
-        localStorage.removeItem('user');
-      }
-    };
+  const [shouldRemoveData, setShouldRemoveData] = useState(false);
 
-    // Add the event listener for the beforeunload event
+  const handleBeforeUnload = (event) => {
+    if (!event.persisted) {
+      setShouldRemoveData(true);
+      event.preventDefault();
+      event.returnValue = '';
+    }
+  };
+
+  useEffect(() => {
     window.addEventListener('beforeunload', handleBeforeUnload);
 
-    // Return the cleanup function to remove the event listener
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
   }, []);
+
+  useEffect(() => {
+    const navigationType = window.performance.navigation.type;
+    if (shouldRemoveData && (navigationType === 0 || navigationType === 255)) {
+      localStorage.removeItem('user');
+      setShouldRemoveData(false);
+    }
+  }, [shouldRemoveData]);
 
   return (
     <ThemeCustomization>

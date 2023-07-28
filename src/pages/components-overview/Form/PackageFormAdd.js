@@ -148,7 +148,7 @@ const PackageFormAdd = () => {
                   onBlur={handleBlur}
                   error={Boolean(touched.cloud && errors.cloud)}
                   helperText={touched.cloud && errors.cloud}
-                  inputProps={{ min: 0, max: 50 }}
+                  inputProps={{ min: 0 }}
                   sx={{ width: '200px' }}
                 />
               </Grid>

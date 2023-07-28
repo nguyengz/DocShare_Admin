@@ -166,7 +166,7 @@ const PackageForm = ({ initialTier }) => {
                       error={Boolean(touched.cloud && errors.cloud)}
                       helperText={touched.cloud && errors.cloud}
                       sx={{ width: '200px' }}
-                      inputProps={{ min: 0, max: 50 }}
+                      inputProps={{ min: 0 }}
                     />
                   </Grid>
                   <Grid item>
