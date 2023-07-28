@@ -115,7 +115,7 @@ const PackageForm = ({ initialTier }) => {
                   </Grid>
                   <Grid item>
                     <TextField
-                      label="Description"
+                      label="Description(day)"
                       name="duration"
                       value={values.duration}
                       onChange={handleChange}
@@ -127,7 +127,7 @@ const PackageForm = ({ initialTier }) => {
                   </Grid>
                   <Grid item>
                     <TextField
-                      label="Price"
+                      label="Price($)"
                       type="number"
                       name="price"
                       value={values.price}
@@ -157,7 +157,7 @@ const PackageForm = ({ initialTier }) => {
                   </Grid>
                   <Grid item>
                     <TextField
-                      label="Cloud"
+                      label="Cloud(MB)"
                       type="number"
                       name="cloud"
                       value={values.cloud}

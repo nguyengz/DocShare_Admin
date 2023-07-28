@@ -71,7 +71,6 @@ const PackageFormAdd = () => {
           .test('is-integer', 'Download must be an integer', (value) => Number.isInteger(value)),
         cloud: Yup.number()
           .min(0, 'Download must be at least 0')
-          .max(50, 'Download must be at most 50')
           .required('Cloud size is required')
           .positive('Cloud size must be a positive number')
       })}
@@ -107,7 +106,7 @@ const PackageFormAdd = () => {
               </Grid>
               <Grid item>
                 <TextField
-                  label="Price"
+                  label="Price($)"
                   type="number"
                   name="price"
                   value={values.price}
